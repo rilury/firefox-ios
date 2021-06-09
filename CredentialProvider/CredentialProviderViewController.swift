@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import AuthenticationServices
-
+import LocalAuthentication
 import Shared
 import Storage
 import Sync
@@ -54,7 +54,11 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
      */
     
     override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-        self.presenter?.credentialList(for: serviceIdentifiers)
+        presentAuthetication(handleSuccess: {
+            self.presenter?.credentialList(for: serviceIdentifiers)
+        }, handleError: {
+            print("Failed to authenticate")
+        })
     }
     
     /*
@@ -77,7 +81,28 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
      */
     
     override func provideCredentialWithoutUserInteraction(for credentialIdentity: ASPasswordCredentialIdentity) {
-        self.presenter?.credentialProvisionRequested(for: credentialIdentity)
+        presentAuthetication(handleSuccess: {
+            self.presenter?.credentialProvisionRequested(for: credentialIdentity)
+        }, handleError: {
+            print("Failed to authenticate")
+        })
+        
+    }
+    
+    func presentAuthetication(handleSuccess: (() -> Void)?, handleError:(() -> Void)? ) {
+        let localAuthContext = LAContext()
+        let reason = "Authenticate to access your password"
+        localAuthContext.localizedFallbackTitle = .AuthenticationEnterPasscode
+        localAuthContext.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason) { success, error in
+            if success {
+                DispatchQueue.main.async {
+                    handleSuccess?()
+                }
+            } else {
+                handleError?()
+                print(error?.localizedDescription ?? "Failed to authenticate")
+            }
+        }
     }
 }
 
