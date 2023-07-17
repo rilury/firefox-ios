@@ -1,5 +1,5 @@
 /* Description label for when there are no credit cards shown in credit card list in autofill settings screen. */
-"CreditCard.Settings.EmptyListDescription.v112" = "Lagre kortinformasjonen din sikkert for å sjekke ut raskere neste gang.";
+"CreditCard.Settings.EmptyListDescription.v112" = "Lagre kortinformasjonen din sikkert for raskere betaling neste gang.";
 
 /* Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered. */
 "CreditCard.Settings.EmptyListTitle.v112" = "Lagre kredittkort til %@";
@@ -33,6 +33,9 @@
 
 /* This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsTitle.v112" = "Synkroniser";
+
+/* This is the footer title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name. */
+"Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "Du har slått av alle %1$@-varsler. Slå dem på ved å gå til enhetens innstillinger > Varsler > %2$@";
 
 /* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. The placeholder will be replaced with the app name. */
 "Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "Les om nyttige funksjoner og hvordan du får mest mulig ut av %@.";
