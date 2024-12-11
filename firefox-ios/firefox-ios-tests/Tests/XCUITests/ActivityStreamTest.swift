@@ -44,23 +44,30 @@ class ActivityStreamTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2273342
     // Smoketest
     func testDefaultSites() throws {
+        logDebugInfo("Checking if the app is launched")
         XCTExpectFailure("The app was not launched", strict: false) {
             waitForExistence(TopSiteCellgroup, timeout: TIMEOUT_LONG)
         }
+
+        logDebugInfo("Wait for collection view to appear")
         mozWaitForElementToExist(app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView])
+        logDebugInfo("Collection view appeared successfully")
+
         // There should be 5 top sites by default
-        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
+        let expectedTopSites = 5
+        logDebugInfo("Validating the number of expected top sites: \(expectedTopSites)")
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: expectedTopSites)
+        logDebugInfo("Number of top sites validated successfully")
+
         // Check their names so that test is added to Smoketest
+        let topSiteNames = ["X", "Amazon", "Wikipedia", "YouTube", "Facebook"]
+        logDebugInfo("Checking if default top site names are displayed: \(topSiteNames.joined(separator: ", "))")
         waitForElementsToExist(
-            [
-                app.collectionViews.cells.staticTexts["X"],
-                app.collectionViews.cells.staticTexts["Amazon"],
-                app.collectionViews.cells.staticTexts["Wikipedia"],
-                app.collectionViews.cells.staticTexts["YouTube"],
-                app.collectionViews.cells.staticTexts["Facebook"]
-            ]
+              topSiteNames.map { app.collectionViews.cells.staticTexts[$0] }
         )
+        logDebugInfo("Default top site names validated successfully")
     }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2272218
     func testTopSites2Add() {
         if iPad() {

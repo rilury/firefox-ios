@@ -28,6 +28,18 @@ class BaseTestCase: XCTestCase {
     // leave empty for non-specific tests
     var specificForPlatform: UIUserInterfaceIdiom?
 
+    enum LogLevel: String {
+        case info = "INFO"      // Blue
+        case warning = "WARNING" // Yellow
+        case error = "ERROR"    // Red
+    }
+
+    // Debug Helper method
+    func logDebugInfo(_ message: String, level: LogLevel = .info) {
+        print("\(level.rawValue): \(message)")
+            XCTContext.runActivity(named: "\(level.rawValue): \(message)") { _ in }
+    }
+
     // These are used during setUp(). Change them prior to setUp() for the app to launch with different args,
     // or, use restart() to re-launch with custom args.
     var launchArguments = [LaunchArguments.ClearProfile,
@@ -84,6 +96,7 @@ class BaseTestCase: XCTestCase {
 
     func setUpApp() {
         setUpLaunchArguments()
+        app.launchArguments.append("--enableDebugHelper")
         if ProcessInfo.processInfo.environment["EXPERIMENT_NAME"] != nil {
             app.activate()
         }
