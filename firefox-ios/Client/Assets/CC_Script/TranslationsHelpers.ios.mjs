@@ -89,6 +89,6 @@ window.TE_requestEnginePayload = async (fromLanguage, toLanguage) => {
     isMocked: false,
   };
 };
-window.TE_reportEngineStatus = () => {};
-window.TE_resolveForceShutdown = () => {};
-window.TE_addProfilerMarker = () => {};
+globalThis.TE_reportEngineStatus = () => {};
+globalThis.TE_resolveForceShutdown = () => {};
+globalThis.TE_addProfilerMarker = () => {};
