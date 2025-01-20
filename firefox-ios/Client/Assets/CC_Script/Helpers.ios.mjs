@@ -147,6 +147,8 @@ export const ChromeUtils = withNotImplementedError({
   importESModule(moduleURI) {
     return internalModuleResolvers.resolveModule(moduleURI);
   },
+  // TODO(Issam): Needs to be added upstream
+  addProfilerMarker() {},
 });
 window.ChromeUtils = ChromeUtils;
 

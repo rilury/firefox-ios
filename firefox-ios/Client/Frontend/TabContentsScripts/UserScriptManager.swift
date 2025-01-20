@@ -65,6 +65,21 @@ class UserScriptManager: FeatureFlaggable {
                 compiledUserScripts[autofillName] = userScript
             }
 
+            // Translations scripts
+            let translationsName = "Translations\(name)"
+            if let autofillScriptCompatPath = Bundle.main.path(
+                forResource: translationsName, ofType: "js"),
+                let source = try? NSString(
+                    contentsOfFile: autofillScriptCompatPath,
+                    encoding: String.Encoding.utf8.rawValue) as String {
+                let wrappedSource = "(function() { const APP_ID_TOKEN = '\(UserScriptManager.appIdToken)'; \(source) })()"
+                let userScript = WKUserScript.createInDefaultContentWorld(
+                    source: wrappedSource,
+                    injectionTime: injectionTime,
+                    forMainFrameOnly: mainFrameOnly)
+                compiledUserScripts[autofillName] = userScript
+            }
+
             let webcompatName = "Webcompat\(name)"
             if let webCompatPath = Bundle.main.path(
                 forResource: webcompatName,
