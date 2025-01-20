@@ -76,10 +76,10 @@ globalThis.TE_getLogLevel = () => {};
 globalThis.TE_log = (message) => console.log("TE_log ---- ", message);
 globalThis.log = (message) => console.log("log ---- ", message);
 
-window.TE_logError = (message) => console.error("TE_error ---- ", message);
-window.TE_getLogLevel = () => {};
-window.TE_destroyEngineProcess = () => {};
-window.TE_requestEnginePayload = async (fromLanguage, toLanguage) => {
+globalThis.TE_logError = (message) => console.error("TE_error ---- ", message);
+globalThis.TE_getLogLevel = () => {};
+globalThis.TE_destroyEngineProcess = () => {};
+globalThis.TE_requestEnginePayload = async (fromLanguage, toLanguage) => {
   const allModels = await getAllModels(fromLanguage, toLanguage);
   return {
     bergamotWasmArrayBuffer: base64ToArrayBuffer(bergamotTranslator),
