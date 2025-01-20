@@ -1248,6 +1248,7 @@
 		B640467E29B9B58200C5C7B6 /* TabLocationViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B640467D29B9B58200C5C7B6 /* TabLocationViewTests.swift */; };
 		BA1C68BA2B7E9EA0000D9397 /* WKFrameInfoExtensionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1C68B92B7E9EA0000D9397 /* WKFrameInfoExtensionsTest.swift */; };
 		BA1C68BC2B7ED153000D9397 /* MockWebKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1C68BB2B7ED153000D9397 /* MockWebKit.swift */; };
+		BA6675C12D3ECD4A00F7A35F /* TranslationsAllFramesAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = BA6675C02D3ECD4900F7A35F /* TranslationsAllFramesAtDocumentStart.js */; };
 		BA7A14842C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7A14832C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift */; };
 		BA8E197F2BF2FB1900590B5F /* AddressFormManager.js in Resources */ = {isa = PBXBuildFile; fileRef = BA8E197E2BF2FB1900590B5F /* AddressFormManager.js */; };
 		BC003F5E2B59F44600929ECB /* BrowserViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC003F5D2B59F44500929ECB /* BrowserViewControllerTests.swift */; };
@@ -8422,6 +8423,9 @@
 		BA1C68B92B7E9EA0000D9397 /* WKFrameInfoExtensionsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKFrameInfoExtensionsTest.swift; sourceTree = "<group>"; };
 		BA1C68BB2B7ED153000D9397 /* MockWebKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWebKit.swift; sourceTree = "<group>"; };
 		BA354251BD3FFF63A161E385 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
+		BA6675BD2D3EC88D00F7A35F /* TranslationsHelper.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = TranslationsHelper.js; sourceTree = "<group>"; };
+		BA6675BF2D3ECC3000F7A35F /* TranslationsHelper.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = TranslationsHelper.js; path = Client/Frontend/UserContent/UserScripts/AllFrames/TranslationsAtDocumentStart/TranslationsHelper.js; sourceTree = "<group>"; };
+		BA6675C02D3ECD4900F7A35F /* TranslationsAllFramesAtDocumentStart.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = TranslationsAllFramesAtDocumentStart.js; path = Client/Assets/TranslationsAllFramesAtDocumentStart.js; sourceTree = "<group>"; };
 		BA7A14832C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAddressWebViewManager.swift; sourceTree = "<group>"; };
 		BA8E197E2BF2FB1900590B5F /* AddressFormManager.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = AddressFormManager.js; sourceTree = "<group>"; };
 		BA904A3B89BC820A7A802D55 /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/Storage.strings"; sourceTree = "<group>"; };
@@ -12679,6 +12683,14 @@
 			path = Address;
 			sourceTree = "<group>";
 		};
+		BA6675BC2D3EC86900F7A35F /* TranslationsAtDocumentStart */ = {
+			isa = PBXGroup;
+			children = (
+				BA6675BD2D3EC88D00F7A35F /* TranslationsHelper.js */,
+			);
+			path = TranslationsAtDocumentStart;
+			sourceTree = "<group>";
+		};
 		C22753422A3CA25100B9C0D1 /* WebsiteDataManagement */ = {
 			isa = PBXGroup;
 			children = (
@@ -13308,6 +13320,7 @@
 		D0FCF7E81FE44D8F004A7995 /* AllFrames */ = {
 			isa = PBXGroup;
 			children = (
+				BA6675BC2D3EC86900F7A35F /* TranslationsAtDocumentStart */,
 				43B002BB29E9E00000C7B788 /* AutofillAtDocumentStart */,
 				4336FAF9264B170F00A6B076 /* WebcompatAtDocumentStart */,
 				D0FCF7EB1FE44DB6004A7995 /* AtDocumentEnd */,
@@ -14253,6 +14266,8 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				BA6675C02D3ECD4900F7A35F /* TranslationsAllFramesAtDocumentStart.js */,
+				BA6675BF2D3ECC3000F7A35F /* TranslationsHelper.js */,
 				2FA435FC1ABB83B4008031D1 /* Account */,
 				D4F0C2642B2C90FB008ECEE8 /* BrowserKit */,
 				F84B21C01A090F8100AAB793 /* Client */,
@@ -15574,6 +15589,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA6675C12D3ECD4A00F7A35F /* TranslationsAllFramesAtDocumentStart.js in Resources */,
 				BA8E197F2BF2FB1900590B5F /* AddressFormManager.js in Resources */,
 				8A1A935B2B757C7C0069C190 /* wave.json in Resources */,
 				D4AFAB0E2AFA8F9A000BFEAA /* SyncIntegrationTests in Resources */,

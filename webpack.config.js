@@ -22,6 +22,10 @@ const AutofillAllFramesAtDocumentStart = glob.sync(
   "./firefox-ios/Client/Frontend/UserContent/UserScripts/AllFrames/AutofillAtDocumentStart/*.{js,mjs}"
 );
 
+const TranslationsAllFramesAtDocumentStart = glob.sync(
+  "./firefox-ios/Client/Frontend/UserContent/UserScripts/AllFrames/TranslationsAtDocumentStart/*.{js,mjs}"
+);
+
 const AddressFormManager = glob.sync(
   "./firefox-ios/Client/Frontend/UserContent/UserScripts/AddressFormManager/*.{js,mjs}"
 );
@@ -70,6 +74,7 @@ module.exports = {
     MainFrameAtDocumentEnd,
     WebcompatAllFramesAtDocumentStart,
     AutofillAllFramesAtDocumentStart,
+    TranslationsAllFramesAtDocumentStart,
     AddressFormManager,
   },
   output: {

@@ -45,6 +45,15 @@ FILES_TO_DOWNLOAD = [
     "toolkit/components/passwordmgr/shared/PasswordGenerator.sys.mjs",
     "toolkit/components/passwordmgr/shared/PasswordRulesParser.sys.mjs",
     "toolkit/components/passwordmgr/LoginManager.shared.sys.mjs",
+
+
+    # TODO(Issam): Specific files for translations stuff,
+    # probably should move to a separate dir ( or rename CC_Script to something more generic)
+    "toolkit/components/translations/bergamot-translator/bergamot-translator.js",
+    "toolkit/components/translations/content/translations-document.sys.mjs",
+    "toolkit/components/translations/TranslationsUtils.sys.mjs",
+    "toolkit/components/translations/content/translations-engine.worker.js",
+    "toolkit/components/translations/content/translations-engine.sys.mjs",
 ]
 
 
