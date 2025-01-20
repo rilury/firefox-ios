@@ -11,7 +11,7 @@ Object.defineProperty(Node.prototype, "flattenedTreeParentNode", {
   configurable: true,
 });
 
-export const Cu = withNotImplementedError({
+export const Cu = {
   // NOTE(Issam): Is this enough ? Or maybe we can use WeakRefs.
   isDeadWrapper: (node) => !node?.isConnected,
   isInAutomation: false,
