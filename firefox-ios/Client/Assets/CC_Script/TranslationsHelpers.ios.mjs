@@ -1,5 +1,6 @@
 import bergamotTranslator from "Translations/Wasm/bergamot-translator.wasm";
-import translationModels from "Assets/RemoteSettingsData/TranslationModels.json";
+// NOTE(Issam): It's better if we pass this via swift :) Ignoring for now.
+// import translationModels from "Assets/RemoteSettingsData/TranslationModels.json";
 
 Node.prototype.ownerGlobal = window;
 
@@ -34,36 +35,41 @@ const base64ToArrayBuffer = (base64) => {
   return bytes.buffer;
 };
 
-// TODO(Issam): Basic wrapper around ( add link ). We will need to extract and share that logic later
-// For now we assume we have a direct model between the langugages and we don't need to pivot
-// Also doing something hacky with the mapping from the filename to model which is not ideal ( but this is just to demo)
-export const getAllModels = (sourceLanguage, targetLanguage) => {
-  const modelsContext = require.context(
-    "Translations/Models",
-    false,
-    /\.(bin|spm)$/
-  );
+// NOTE(Issam): Wasm is bundled using webpack. Language models are fetched from swift.
+// Is this a good approach ?
+export const getAllModels = async (sourceLanguage, targetLanguage) => {
+  //   const modelsContext = require.context(
+  //     "Translations/Models",
+  //     false,
+  //     /\.(bin|spm)$/
+  //   );
 
-  const modelsForLanguagePair = translationModels.filter(
-    (model) =>
-      model.fromLang === sourceLanguage && model.toLang === targetLanguage
-  );
+  // NOTE(Issam): We can do all processing in swift
+  const modelsForLanguagePair =
+    await webkit.messageHandlers.translations.postMessage({
+      action: "getModels",
+      payload: {
+        sourceLanguage,
+        targetLanguage,
+      },
+    });
 
-  const results = {};
+  return modelsForLanguagePair;
+  //   const results = {};
 
-  modelsForLanguagePair.forEach((model) => {
-    const modelRawString = modelsContext(`./${model.attachment.filename}`);
-    results[model.fileType] = {
-      buffer: base64ToArrayBuffer(modelRawString),
-      record: model,
-    };
-  });
+  //   modelsForLanguagePair.forEach((model) => {
+  //     const modelRawString = modelsContext(`./${model.attachment.filename}`);
+  //     results[model.fileType] = {
+  //       buffer: base64ToArrayBuffer(modelRawString),
+  //       record: model,
+  //     };
+  //   });
 
-  return {
-    languageModelFiles: results,
-    sourceLanguage: sourceLanguage,
-    targetLanguage: targetLanguage,
-  };
+  //   return {
+  //     languageModelFiles: results,
+  //     sourceLanguage: sourceLanguage,
+  //     targetLanguage: targetLanguage,
+  //   };
 };
 
 window.TE_getLogLevel = () => {};
@@ -74,7 +80,7 @@ window.TE_logError = (message) => console.error("TE_error ---- ", message);
 window.TE_getLogLevel = () => {};
 window.TE_destroyEngineProcess = () => {};
 window.TE_requestEnginePayload = async (fromLanguage, toLanguage) => {
-  const allModels = getAllModels(fromLanguage, toLanguage);
+  const allModels = await getAllModels(fromLanguage, toLanguage);
   return {
     bergamotWasmArrayBuffer: base64ToArrayBuffer(bergamotTranslator),
     translationModelPayloads: [allModels],

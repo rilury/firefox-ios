@@ -88,6 +88,11 @@ module.exports = {
         include: [path.resolve(__dirname, "firefox-ios/Client/Assets/CC_Script/")],
         type: "javascript/auto",
       },
+      // NOTE(Issam): Embeds the raw content as a a base64 string ( which is easier for now )
+      {
+        test: /\.(wasm)$/,
+        type: "asset/inline",
+      },
     ],
   },
   plugins: [CustomResourceURIWebpackPlugin],
@@ -97,6 +102,10 @@ module.exports = {
     },
     alias: {
       Assets: path.resolve(__dirname, "firefox-ios/Client/Assets"),
+      "Translations/Wasm": path.resolve(
+        __dirname,
+        "firefox-ios/Client/Assets/RemoteSettingsData/attachments/translations-wasm"
+      ),
     },
   },
 };

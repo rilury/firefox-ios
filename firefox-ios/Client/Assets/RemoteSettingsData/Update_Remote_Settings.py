@@ -51,6 +51,13 @@ def update_settings_file(tmp_file_path, target_file_path, name):
         print(f"Created new rules file {target_file_path} for {name}.")
         return True
 
+def apply_filters(records, filters):
+    if not filters:
+        return records
+    return [
+        record for record in records
+        if all(record.get(key) in value for key, value in filters.items())
+    ]
 
 def fetch_records_attachments(records, collection, base_url):
     changes_detected = False
@@ -58,8 +65,7 @@ def fetch_records_attachments(records, collection, base_url):
         attachment = record.get("attachment", None)
         if attachment:
             attachment_subdir =  os.path.join("attachments", collection["collection_id"])
-            attachment_extension = mimetypes.guess_extension(attachment["mimetype"])
-            attachment_file_name = f"{record['name']}{attachment_extension}"
+            attachment_file_name = attachment["filename"]
             attachment_file_tmp_path = os.path.join(GITHUB_ACTIONS_TMP_PATH, attachment_subdir, attachment_file_name)
             attachment_file_path = os.path.join(RS_DATA_PATH, attachment_subdir, attachment_file_name)
             attachment_url = f"{base_url}{attachment['location']}"
@@ -85,6 +91,9 @@ def main():
         records_url = f"{collection['url']}/buckets/{collection['bucket_id']}/collections/{collection['collection_id']}/records"
         response = fetch(records_url).json()
         records = response.get("data", None)
+
+        filters = collection.get("filter_expressions", {})
+        records = apply_filters(records, filters)
 
         # If no records found, skip to next collection
         if not records:
