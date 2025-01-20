@@ -72,9 +72,9 @@ export const getAllModels = async (sourceLanguage, targetLanguage) => {
   //   };
 };
 
-window.TE_getLogLevel = () => {};
-window.TE_log = (message) => console.log("TE_log ---- ", message);
-window.log = (message) => console.log("log ---- ", message);
+globalThis.TE_getLogLevel = () => {};
+globalThis.TE_log = (message) => console.log("TE_log ---- ", message);
+globalThis.log = (message) => console.log("log ---- ", message);
 
 window.TE_logError = (message) => console.error("TE_error ---- ", message);
 window.TE_getLogLevel = () => {};
