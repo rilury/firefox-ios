@@ -15,7 +15,7 @@ export const Cu = {
   // NOTE(Issam): Is this enough ? Or maybe we can use WeakRefs.
   isDeadWrapper: (node) => !node?.isConnected,
   isInAutomation: false,
-});
+};
 globalThis.Cu = Cu;
 
 export const setTimeout = globalThis.setTimeout.bind(window);
