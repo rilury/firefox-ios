@@ -1,6 +1,7 @@
 const glob = require("glob");
 const path = require("path");
 const webpack = require("webpack");
+const replaceImportScripts = require("./babel-plugins/replace-importScripts");
 const Overrides = require("./firefox-ios/Client/Assets/CC_Script/Overrides.ios.js");
 
 const AllFramesAtDocumentStart = glob.sync(
@@ -24,6 +25,10 @@ const AutofillAllFramesAtDocumentStart = glob.sync(
 
 const TranslationsAllFramesAtDocumentStart = glob.sync(
   "./firefox-ios/Client/Frontend/UserContent/UserScripts/AllFrames/TranslationsAtDocumentStart/*.{js,mjs}"
+);
+
+const TranslationsBackground = glob.sync(
+  "./firefox-ios/Client/Frontend/UserContent/UserScripts/TranslationsBackground/*.{js,mjs}"
 );
 
 const AddressFormManager = glob.sync(
@@ -76,6 +81,7 @@ module.exports = {
     AutofillAllFramesAtDocumentStart,
     TranslationsAllFramesAtDocumentStart,
     AddressFormManager,
+    TranslationsBackground,
   },
   output: {
     filename: "[name].js",
@@ -85,13 +91,36 @@ module.exports = {
     rules: [
       {
         test: /\.mjs$/,
-        include: [path.resolve(__dirname, "firefox-ios/Client/Assets/CC_Script/")],
+        include: [
+          path.resolve(__dirname, "firefox-ios/Client/Assets/CC_Script/"),
+        ],
         type: "javascript/auto",
       },
       // NOTE(Issam): Embeds the raw content as a a base64 string ( which is easier for now )
       {
         test: /\.(wasm)$/,
         type: "asset/inline",
+      },
+      // NOTE(Issam): Inlines workers as blob urls to avoid any requests runtime.
+      // Additionally, convert importScripts to normal imports that are resolved at build time.
+      {
+        test: /\.worker\.js$/,
+        use: [
+          {
+            loader: "worker-loader",
+            options: {
+              inline: "no-fallback",
+              esModule: false,
+            },
+          },
+          {
+            loader: "babel-loader",
+            options: {
+              presets: [],
+              plugins: [[replaceImportScripts, { useScriptLoader: true }]],
+            },
+          },
+        ],
       },
     ],
   },

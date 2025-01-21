@@ -2949,6 +2949,11 @@ class BrowserViewController: UIViewController,
         return (userDefaults.object(forKey: keyAddressAutofill) as? Bool ?? true)
     }
 
+    private func translationsSetup(_ tab: Tab, didCreateWebView webView: WKWebView) {
+        let translationsHelper = TranslationsHelper(tab: tab)
+        tab.addContentScript(translationsHelper, name: TranslationsHelper.name())
+    }
+
     private func autofillSetup(_ tab: Tab, didCreateWebView webView: WKWebView) {
         let formAutofillHelper = FormAutofillHelper(tab: tab)
         tab.addContentScript(formAutofillHelper, name: FormAutofillHelper.name())
@@ -3541,6 +3546,9 @@ extension BrowserViewController: LegacyTabDelegate {
             }
         }
 
+
+        // Translations setup and callback
+        translationsSetup(tab, didCreateWebView: webView)
         // Credit card autofill setup and callback
         autofillSetup(tab, didCreateWebView: webView)
 
