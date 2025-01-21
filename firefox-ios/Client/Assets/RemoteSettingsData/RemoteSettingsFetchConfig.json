@@ -28,6 +28,20 @@
           "2.0"
         ]
       }
+    },
+    {
+      "name": "Translation Models",
+      "url": "https://firefox.settings.services.mozilla.com/v1",
+      "bucket_id": "main",
+      "collection_id": "translations-models",
+      "fetch_attachments": false,
+      "save_records": true,
+      "file": "./firefox-ios/Client/Assets/RemoteSettingsData/RemoteTranslationsModels.json",
+      "filter_expressions": {
+        "version": [
+          "1.0"
+        ]
+      }
     }
   ]
 }
