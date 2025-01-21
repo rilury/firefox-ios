@@ -3546,7 +3546,6 @@ extension BrowserViewController: LegacyTabDelegate {
             }
         }
 
-
         // Translations setup and callback
         translationsSetup(tab, didCreateWebView: webView)
         // Credit card autofill setup and callback

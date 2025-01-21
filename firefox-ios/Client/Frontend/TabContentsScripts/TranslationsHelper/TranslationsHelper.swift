@@ -19,7 +19,6 @@ struct TranslationMessage: Codable {
     }
 }
 
-
 class TranslationsHelper: TabContentScript {
     // MARK: - Handler Names Enum
     enum HandlerName: String {

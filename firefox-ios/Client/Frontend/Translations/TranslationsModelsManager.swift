@@ -107,18 +107,23 @@ class TranslationsModelsManager {
         try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
     }
 
-    /// TODO(Issam): Cleanup. This is a wrapper to make the data in the format JS expects, but this makes the code really complicated.
+    /// TODO(Issam): Cleanup. This is a wrapper to make the data in the format JS expects,
+    /// but this makes the code really complicated.
     func fetchModelsInJSFormat(for fromLang: String, toLang: String, version: String = TranslationsModelsManager.version,
                                completion: @escaping (Result<[String: [String: Any]], Error>) -> Void) {
-        
         fetchModels(for: fromLang, toLang: toLang, version: version) { result in
             switch result {
             case .success(let models):
                 var response: [String: [String: Any]] = [:]
 
                 for (fileType, path) in models {
-                    if let modelData = self.prepareJSResponse(fileType: fileType, path: path,
-                                                              fromLang: fromLang, toLang: toLang, version: version) {
+                    if let modelData = self.prepareJSResponse(
+                        fileType: fileType,
+                        path: path,
+                        fromLang: fromLang,
+                        toLang: toLang,
+                        version: version
+                    ) {
                         response[fileType] = modelData
                     }
                 }

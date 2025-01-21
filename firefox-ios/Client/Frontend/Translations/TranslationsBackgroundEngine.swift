@@ -30,7 +30,6 @@ final class FrameRegistry {
     }
 }
 
-
 /// Translations engine should run in the background seperate from running tabs and should only be instantiated once.
 /// This is done because loading the models is expensive.
 /// TODO(Issam): Run some benchmarks to get some initial values.
@@ -84,7 +83,7 @@ class TranslationsBackgroundEngine: NSObject, WKScriptMessageHandlerWithReply {
         /// NOTE(Issam): Make this an enum and decode.
         guard let type = message["type"] as? String,
               let payload = message["payload"] as? [String: Any],
-              let _ = payload["innerWindowId"] as? String else {
+              let payload["innerWindowId"] as? String != nil  else {
             print("[issam] Invalid message structure: \(message)")
             return
         }

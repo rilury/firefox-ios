@@ -14,14 +14,13 @@ enum TranslationsModelFileType: String, Codable {
     case lex, vocab, model
 }
 
-
 struct Attachment: Codable, Equatable {
     let hash: String
     let size: Int
     let filename: String
     let location: String
     let mimetype: String
-    
+
     func toDictionary() -> [String: Any] {
         return [
             "hash": hash,
