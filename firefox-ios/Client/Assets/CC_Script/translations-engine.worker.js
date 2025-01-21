@@ -13,6 +13,11 @@
 /* global loadBergamot */
 importScripts("chrome://global/content/translations/bergamot-translator.js");
 
+// TODO(Issam): tmp fix should be in shims file.
+const ChromeUtils = {
+  addProfilerMarker: () => {},
+};
+
 // Respect the preference "browser.translations.logLevel".
 let _loggingLevel = "Error";
 function log(...args) {

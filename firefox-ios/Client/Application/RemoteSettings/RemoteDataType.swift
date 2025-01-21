@@ -21,6 +21,7 @@ enum RemoteDataTypeError: Error, LocalizedError {
 enum RemoteDataType: String, Codable {
     case passwordRules
     case contentBlockingLists
+    case translationsModels
 
     var type: any RemoteDataTypeRecord.Type {
         switch self {
@@ -28,6 +29,8 @@ enum RemoteDataType: String, Codable {
             return PasswordRuleRecord.self
         case .contentBlockingLists:
             return ContentBlockingListRecord.self
+        case .translationsModels:
+            return TranslationsModelRecord.self
         }
     }
 
@@ -37,6 +40,8 @@ enum RemoteDataType: String, Codable {
             return ["RemotePasswordRules"]
         case .contentBlockingLists:
             return BlocklistFileName.allCases.map { $0.filename }
+        case .translationsModels:
+            return ["RemoteTranslationsModels"]
         }
     }
 
@@ -46,6 +51,8 @@ enum RemoteDataType: String, Codable {
             return "Password Rules"
         case .contentBlockingLists:
             return "Content Blocking Lists"
+        case .translationsModels:
+            return "Translations Models"
         }
     }
 
