@@ -9,7 +9,7 @@ import "Assets/CC_Script/translations-engine.sys.mjs";
 
 // Hardcoding for now just to demo things
 const fromLanguage = "en";
-const toLanguage = "fr";
+const toLanguage = "es";
 const innerWindowId = crypto.randomUUID();
 const translationsCache = new LRUCache(fromLanguage, toLanguage);
 

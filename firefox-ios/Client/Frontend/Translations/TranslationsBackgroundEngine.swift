@@ -83,7 +83,7 @@ class TranslationsBackgroundEngine: NSObject, WKScriptMessageHandlerWithReply {
         /// NOTE(Issam): Make this an enum and decode.
         guard let type = message["type"] as? String,
               let payload = message["payload"] as? [String: Any],
-              let payload["innerWindowId"] as? String != nil  else {
+              payload["innerWindowId"] as? String != nil  else {
             print("[issam] Invalid message structure: \(message)")
             return
         }
@@ -119,13 +119,13 @@ class TranslationsBackgroundEngine: NSObject, WKScriptMessageHandlerWithReply {
 
         if type == "getModels" {
             // TODO(Issam): Change this to "from:to:" args.
-            TranslationsModelsManager.shared.fetchModelsInJSFormat(for: "en", toLang: "fr") { result in
+            TranslationsModelsManager.shared.fetchModelsInJSFormat(for: "en", toLang: "es") { result in
                 switch result {
                     case .success(let response):
                         let fullResponse: [String: Any] = [
                             "languageModelFiles": response,
                             "sourceLanguage": "en",
-                            "targetLanguage": "fr"
+                            "targetLanguage": "es"
                         ]
                         replyHandler(fullResponse, nil)
                     case .failure(let error):
