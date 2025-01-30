@@ -98,10 +98,11 @@ class FaviconURLHandlerTests: XCTestCase {
     }
 
     func testGetFaviconURL_whenClientError() {
-
+        print("tbd")
     }
-    func testGetFaviconURL_whenServerError() {
 
+    func testGetFaviconURL_whenServerError() {
+        print("tbd")
     }
 
     //

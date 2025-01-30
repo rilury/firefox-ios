@@ -149,9 +149,6 @@ class DefaultImageHandler: ImageHandler {
 
             let image = try await letterImageGenerator.generateLetterImage(siteString: siteString)
 
-            //If there was a client-side error retrieving the image (e.g. lost internet connection),
-            //then we should not cache the fallback letter favicon.
-            //But if we receive a server error, we should cache it so we don't keep hitting the server with favicon requests.
             if shouldCache {
                 await imageCache.cacheImage(image: image, cacheKey: imageModel.cacheKey, type: imageModel.imageType)
             }
