@@ -43,6 +43,19 @@ class FaviconURLFetcherTests: XCTestCase {
         }
     }
 
+    func testGetFavicon_whenNetworkError() async throws {
+        let url = URL(string: "http://firefox.com")!
+        networkMock.error = URLError(.badURL)
+
+        do {
+            _ = try await subject.fetchFaviconURL(siteURL: .init(string: "")!)
+            XCTFail("it shouldn't fail")
+        } catch {
+            let responseError = try XCTUnwrap(error as? URLError)
+            XCTAssertEqual(responseError.code, .badURL)
+        }
+    }
+
     // MARK: - Private helpers
 
     private func generateHTMLData(string: String) -> Data? {
