@@ -16,6 +16,9 @@ case "${CONFIGURATION}" in
     Fennec_Testing)
         CHANNEL="developer"
         ;;
+    FennecProd)
+        CHANNEL="release"
+	;;
     Fennec_Enterprise)
         CHANNEL="developer"
         ;;
