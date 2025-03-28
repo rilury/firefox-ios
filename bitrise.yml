@@ -1818,7 +1818,7 @@ workflows:
         - connection: "off"
         - itunescon_user: $APPLE_ACCOUNT_ID
     envs:
-    - BITRISE_SCHEME: Fennec
+    - BITRISE_SCHEME: FennecProd
       opts:
         is_expand: false
     description: This step is to build, archive and upload Firefox Release and Beta
