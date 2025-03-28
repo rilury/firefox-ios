@@ -22,6 +22,9 @@ case "${CONFIGURATION}" in
     Fennec_Enterprise)
         CHANNEL="developer"
         ;;
+    FirefoxStaging)
+        CHANNEL="beta"
+        ;;
     FirefoxBeta)
         CHANNEL="beta"
         ;;
