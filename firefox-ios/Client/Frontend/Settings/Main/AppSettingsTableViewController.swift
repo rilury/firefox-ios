@@ -203,7 +203,18 @@ class AppSettingsTableViewController: SettingsTableViewController,
             settingsDelegate: parentCoordinator,
             isStudiesCase: true
         )
-        studiesSetting.settingDidChange = {
+        studiesSetting.settingDidChange = { [weak self] in
+            // FIXME FXIOS-11891 Once App Icon Selection is a hardcoded feature no longer behind an experiment feature flag,
+            // we can remove this, because the app icon selection setting will not disappear when studies are disabled.
+            if let self,
+               $0 == false,
+               self.featureFlags.isFeatureEnabled(.appIconSelection, checking: .buildOnly),
+               AppIcon.initFromSystem() != .regular {
+                // If the user has set an alternative app icon under experiment enrolment, we need to revert before we
+                // remove them from all experiments.
+                UIApplication.shared.setAlternateIconName(nil)
+            }
+
             Experiments.setStudiesSetting($0)
         }
 
