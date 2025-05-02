@@ -136,6 +136,14 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
               let type = res["type"] as? String
         else { return }
 
+        SummarizerHelper.fetchPageContent(from: (tab?.webView!)!) { content, error in
+          if let content = content {
+            print("content: \(content)")
+          } else  {
+              print("Error: \(String(describing: error))")
+          }
+        }
+
         // NOTE(FXIOS-12024): This is added only to be able t oswitch between implementations inside the JS.
         // Once we rollout the update for all users, this will be removed.
         if type == "ready" {

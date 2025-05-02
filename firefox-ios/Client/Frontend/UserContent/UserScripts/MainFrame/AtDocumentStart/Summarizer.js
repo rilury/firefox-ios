@@ -34,6 +34,7 @@ function readerize() {
     readabilityResult.title = escapeHTML(readabilityResult.title);
     // Sanitize the byline to prevent a malicious page from inserting HTML in the `<byline>`.
     readabilityResult.byline = escapeHTML(readabilityResult.byline);
+    console.log("readabilityResult", readabilityResult);
     return readabilityResult.textContent ?? readabilityResult.content;
   }
 }

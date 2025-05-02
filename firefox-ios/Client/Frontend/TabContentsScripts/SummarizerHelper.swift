@@ -12,21 +12,23 @@ class SummarizerHelper {
         from webView: WKWebView,
         completion: @escaping (String?, Error?) -> Void
       ) {
-
-        let js = "window.__firefox__.summarizer.readerize();"
-        
-        webView.evaluateJavaScript(js) { result, error in
-          if let e = error {
-            completion(nil, e)
-            return
-          }
           
-          guard let result = result as? String else {
-            completion(nil, nil)
-            return
+          let js = "window.__firefox__.summarizer.readerize();"
+          
+          webView.evaluateJavaScript(js, in: nil, in: .defaultClient) { result in
+              switch result {
+              case .failure(let error):
+                  completion(nil, error)
+                  
+              case .success(let anyValue):
+                  if let string = anyValue as? String {
+                      completion(string, nil)
+                  }
+                  else {
+                      completion(nil, nil)
+                  }
+              }
           }
-          completion(result, nil)
-        }
       }
 
 }
