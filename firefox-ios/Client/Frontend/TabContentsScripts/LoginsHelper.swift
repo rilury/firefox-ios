@@ -135,7 +135,7 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
         guard let res = message.body as? [String: Any],
               let type = res["type"] as? String
         else { return }
-
+        
         SummarizerHelper.fetchPageContent(from: (tab?.webView!)!) { content, error in
           if let content = content {
             print("content: \(content)")
