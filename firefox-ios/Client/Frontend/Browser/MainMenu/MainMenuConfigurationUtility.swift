@@ -80,6 +80,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     ) -> [MenuSection] {
         // Always include these sections
         var menuSections: [MenuSection] = [
+            tempSection(with: uuid, tabInfo: tabInfo),
             getNewTabSection(with: uuid, tabInfo: tabInfo),
             getLibrariesSection(with: uuid, tabInfo: tabInfo),
             getOtherToolsSection(
@@ -98,6 +99,30 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         }
 
         return menuSections
+    }
+
+    private func tempSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo) -> MenuSection {
+        return MenuSection(options: [
+            MenuElement(
+                title: "Summary",
+                iconName: Icons.tools,
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: .MainMenu.TabsSection.AccessibilityLabels.NewTab,
+                a11yHint: "",
+                a11yId: AccessibilityIdentifiers.MainMenu.newTab,
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.tapSummaryWebPage,
+                            navigationDestination: MenuNavigationDestination(.newTab),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                        )
+                    )
+                }
+            ),
+        ])
     }
 
     // MARK: - New Tabs Section

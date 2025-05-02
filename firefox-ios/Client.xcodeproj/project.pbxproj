@@ -12475,6 +12475,13 @@
 			path = Mock;
 			sourceTree = "<group>";
 		};
+		8A9102CC2DC53FFF000CF42F /* Summary */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Summary;
+			sourceTree = "<group>";
+		};
 		8A93F85C29D36D9F004159D9 /* Coordinators */ = {
 			isa = PBXGroup;
 			children = (
@@ -15097,6 +15104,7 @@
 		F84B21F11A0910F600AAB793 /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
+				8A9102CC2DC53FFF000CF42F /* Summary */,
 				8A1A93572B757C7B0069C190 /* LottieFiles */,
 				392ED7D51D0AEEEE009D9B62 /* Accessors */,
 				E692E3271C46E62D009D1240 /* AuthenticationManager */,
@@ -16510,7 +16518,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nMODIFIED_FILES=$(git diff --name-only --diff-filter=ACM | grep -e '\\.swift$')\n\nSWIFTLINT_ROOT=\"${SRCROOT}/..\"\n\nif which swiftlint > /dev/null; then\n    # Move to the location of the root Swiftlint config file in\n    # order to use nested configurations\n    cd ${SWIFTLINT_ROOT}\n\n    swiftlint lint ${MODIFIED_FILES}\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\" \nfi\n";
+			shellScript = "
+";
 		};
 		E6639F191BF11E3A002D0853 /* Conditionally Add Settings Bundle */ = {
 			isa = PBXShellScriptBuildPhase;

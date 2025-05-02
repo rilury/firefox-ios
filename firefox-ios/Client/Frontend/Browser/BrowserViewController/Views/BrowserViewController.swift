@@ -343,6 +343,16 @@ class BrowserViewController: UIViewController,
         didInit()
     }
 
+    @objc func showSummary() {
+        // Example text to summarize
+        let textToSummarize = """
+            Sample Text
+        """
+        print("Sample Text")
+//
+//        presentSummaryBottomSheet(forText: textToSummarize)
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

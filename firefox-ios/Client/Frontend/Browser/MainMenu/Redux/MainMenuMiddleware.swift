@@ -26,6 +26,7 @@ final class MainMenuMiddleware {
         static let share = "share"
         static let saveAsPDF = "save_as_PDF"
         static let switchToDesktopSite = "switch_to_desktop_site"
+        static let summarizeWebsite = "summarize_website"
         static let switchToMobileSite = "switch_to_mobile_site"
         static let readerViewTurnOn = "reader_view_turn_on"
         static let readerViewTurnOff = "reader_view_turn_off"
@@ -50,11 +51,18 @@ final class MainMenuMiddleware {
         self.logger = logger
     }
 
-    lazy var mainMenuProvider: Middleware<AppState> = { state, action in
+    lazy var mainMenuMiddleware: Middleware<AppState> = { state, action in
+        self.mainMenuProvider(state: state, action: action)
+    }
+
+    func mainMenuProvider(state: AppState, action: Action) {
         guard let action = action as? MainMenuAction else { return }
         let isHomepage = action.telemetryInfo?.isHomepage ?? false
 
         switch action.actionType {
+        case MainMenuActionType.tapSummaryWebPage:
+            self.handleWebPageSummary(action: action, isHomepage: isHomepage)
+
         case MainMenuActionType.tapNavigateToDestination:
             self.handleTapNavigateToDestinationAction(action: action, isHomepage: isHomepage)
 
@@ -112,7 +120,8 @@ final class MainMenuMiddleware {
         case MainMenuDetailsActionType.tapDismissView:
             self.telemetry.closeButtonTapped(isHomepage: isHomepage)
 
-        default: break
+        default:
+            break
         }
     }
 
@@ -129,6 +138,10 @@ final class MainMenuMiddleware {
         } else if action.detailsViewToShow == .save {
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.save)
         }
+    }
+
+    private func handleWebPageSummary(action: MainMenuAction, isHomepage: Bool) {
+        print(action.tabID ?? "NOTHING")
     }
 
     private func handleTapToggleUserAgentAction(action: MainMenuAction, isHomepage: Bool) {

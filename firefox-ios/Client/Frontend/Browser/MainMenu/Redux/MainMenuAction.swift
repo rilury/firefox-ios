@@ -42,6 +42,7 @@ enum MainMenuActionType: ActionType {
     case tapCloseMenu
     case tapShowDetailsView
     case tapToggleUserAgent
+    case tapSummaryWebPage
     case updateCurrentTabInfo
     case didInstantiateView
     case viewDidLoad

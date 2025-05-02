@@ -132,6 +132,8 @@ struct MainMenuState: ScreenState, Equatable {
             return handleUpdateCurrentTabInfoAction(state: state, action: action)
         case MainMenuActionType.tapShowDetailsView:
             return handleTapShowDetailsViewAction(state: state, action: action)
+        case MainMenuActionType.tapSummaryWebPage:
+            return handleTapSummaryAction(state: state, action: action)
         case MainMenuActionType.tapNavigateToDestination:
             return handleTapNavigateToDestinationAction(state: state, action: action)
         case MainMenuActionType.tapToggleUserAgent,
@@ -205,6 +207,17 @@ struct MainMenuState: ScreenState, Equatable {
         )
     }
 
+    private static func handleTapSummaryAction(state: MainMenuState, action: Action) -> MainMenuState {
+        return MainMenuState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuElements,
+            currentTabInfo: state.currentTabInfo,
+            shouldDismiss: true,
+            accountData: state.accountData,
+            accountIcon: state.accountIcon
+        )
+    }
+    
     private static func handleTapNavigateToDestinationAction(state: MainMenuState, action: Action) -> MainMenuState {
         guard let action = action as? MainMenuAction else { return defaultState(from: state) }
 
