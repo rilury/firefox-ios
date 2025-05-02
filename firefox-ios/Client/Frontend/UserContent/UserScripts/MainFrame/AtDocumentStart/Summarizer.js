@@ -34,10 +34,7 @@ function readerize() {
     readabilityResult.title = escapeHTML(readabilityResult.title);
     // Sanitize the byline to prevent a malicious page from inserting HTML in the `<byline>`.
     readabilityResult.byline = escapeHTML(readabilityResult.byline);
-    webkit.messageHandlers.summarizerMessageHandler.postMessage({
-      Type: "SummarizerPageContent",
-      Value: readabilityResult,
-    });
+    return readabilityResult;
   }
 }
 
