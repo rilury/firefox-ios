@@ -115,10 +115,20 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.tapSummaryWebPage,
-                            navigationDestination: MenuNavigationDestination(.newTab),
+                            actionType: MainMenuActionType.tapNavigateToDestination,
+                            navigationDestination: MenuNavigationDestination(
+                                .webpageSummary
+                            ),
                             telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                         )
+
+                        // FIXME delete tapSummaryWebPage not needed
+//                        MainMenuAction(
+//                            windowUUID: uuid,
+//                            actionType: MainMenuActionType.tapSummaryWebPage,
+//                            navigationDestination: MenuNavigationDestination(.newTab),
+//                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+//                        )
                     )
                 }
             ),

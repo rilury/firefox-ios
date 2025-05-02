@@ -299,8 +299,13 @@ final class MainMenuMiddleware {
         case .editBookmark:
             self.telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.editBookmark)
 
+        case .webpageSummary:
+            // TODO telemetry
+            break
+
         case .zoom:
             self.telemetry.toolsSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.zoom)
+
         }
     }
 }

@@ -218,6 +218,10 @@ class BrowserCoordinator: BaseCoordinator,
         present(navigationController)
     }
 
+    func showWebpageSummary() {
+        browserViewController.showSummary()
+    }
+
     // MARK: - PrivateHomepageDelegate
     func homePanelDidRequestToOpenInNewTab(with url: URL, isPrivate: Bool, selectNewTab: Bool) {
         openInNewTab(url: url, isPrivate: isPrivate, selectNewTab: selectNewTab)

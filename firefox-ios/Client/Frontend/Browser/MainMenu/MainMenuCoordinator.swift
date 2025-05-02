@@ -16,6 +16,7 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
     func updateZoomPageBarVisibility()
     func presentSavePDFController()
     func showPrintSheet()
+    func showWebpageSummary()
 
     /// Open the share sheet to share the currently selected `Tab`.
     func showShareSheetForCurrentlySelectedTab()
@@ -122,6 +123,9 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
 
             case .zoom:
                 self.navigationHandler?.updateZoomPageBarVisibility()
+
+            case .webpageSummary:
+                self.navigationHandler?.showWebpageSummary()
             }
 
             removeCoordinatorFromParent()
