@@ -345,14 +345,23 @@ class BrowserViewController: UIViewController,
 
     @objc func showSummary() {
         // Example text to summarize
-        let textToSummarize = """
-            Sample Text
-        """
+//        let textToSummarize = """
+//            Sample Text
+//        """
         print("Sample Text")
-//
-//        presentSummaryBottomSheet(forText: textToSummarize)
+        if let selectedTabWebView = tabManager.selectedTab?.webView {
+            SummarizerHelper.fetchPageContent(from: selectedTabWebView) { content, error in
+              if let content = content {
+                  print("content: \(content)")
+                  self.presentSummaryBottomSheet(forText: content)
+              } else  {
+                  print("Error: \(String(describing: error))")
+              }
+            }
+            
+        }
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

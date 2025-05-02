@@ -989,6 +989,9 @@
 		8A8D277B2CBFFD710076AD3A /* BrowserNavigationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D277A2CBFFD710076AD3A /* BrowserNavigationType.swift */; };
 		8A8D277D2CC000BE0076AD3A /* NavigationBrowserAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D277C2CC000BE0076AD3A /* NavigationBrowserAction.swift */; };
 		8A8DDEBF276259A900E7B97A /* RatingPromptManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8DDEBE276259A900E7B97A /* RatingPromptManager.swift */; };
+		8A9102DA2DC54864000CF42F /* SummaryModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9102D72DC54864000CF42F /* SummaryModels.swift */; };
+		8A9102DB2DC54864000CF42F /* SummaryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9102D82DC54864000CF42F /* SummaryRequest.swift */; };
+		8A9102DC2DC54864000CF42F /* TypewriterText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9102D92DC54864000CF42F /* TypewriterText.swift */; };
 		8A93080927BFE88F0052167D /* PhotonActionSheetContainerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A93080827BFE88F0052167D /* PhotonActionSheetContainerCell.swift */; };
 		8A93080B27C01AD60052167D /* SingleActionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A93080A27C01AD60052167D /* SingleActionViewModel.swift */; };
 		8A93F85E29D36DA9004159D9 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A93F85D29D36DA9004159D9 /* Coordinator.swift */; };
@@ -8241,6 +8244,9 @@
 		8A8D277A2CBFFD710076AD3A /* BrowserNavigationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserNavigationType.swift; sourceTree = "<group>"; };
 		8A8D277C2CC000BE0076AD3A /* NavigationBrowserAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBrowserAction.swift; sourceTree = "<group>"; };
 		8A8DDEBE276259A900E7B97A /* RatingPromptManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingPromptManager.swift; sourceTree = "<group>"; };
+		8A9102D72DC54864000CF42F /* SummaryModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryModels.swift; sourceTree = "<group>"; };
+		8A9102D82DC54864000CF42F /* SummaryRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryRequest.swift; sourceTree = "<group>"; };
+		8A9102D92DC54864000CF42F /* TypewriterText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypewriterText.swift; sourceTree = "<group>"; };
 		8A93080827BFE88F0052167D /* PhotonActionSheetContainerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetContainerCell.swift; sourceTree = "<group>"; };
 		8A93080A27C01AD60052167D /* SingleActionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleActionViewModel.swift; sourceTree = "<group>"; };
 		8A93F85D29D36DA9004159D9 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
@@ -12478,6 +12484,9 @@
 		8A9102CC2DC53FFF000CF42F /* Summary */ = {
 			isa = PBXGroup;
 			children = (
+				8A9102D72DC54864000CF42F /* SummaryModels.swift */,
+				8A9102D82DC54864000CF42F /* SummaryRequest.swift */,
+				8A9102D92DC54864000CF42F /* TypewriterText.swift */,
 			);
 			path = Summary;
 			sourceTree = "<group>";
@@ -17832,6 +17841,9 @@
 				E19F86032D6F4B51007453A7 /* ToolbarLayoutStyle.swift in Sources */,
 				81C3E6092C93261A00A19A5A /* MainMenuDetailsViewController.swift in Sources */,
 				8ADC2A182A33775F00543DAA /* FxASignInViewParameters.swift in Sources */,
+				8A9102DA2DC54864000CF42F /* SummaryModels.swift in Sources */,
+				8A9102DB2DC54864000CF42F /* SummaryRequest.swift in Sources */,
+				8A9102DC2DC54864000CF42F /* TypewriterText.swift in Sources */,
 				EBA3B2D22268F57E00728BDB /* BadgeWithBackdrop.swift in Sources */,
 				8AB5958828413F6C0090F4AE /* LegacyBookmarksCell.swift in Sources */,
 				8A83B7482A264FB7002FF9AC /* LibraryCoordinator.swift in Sources */,
