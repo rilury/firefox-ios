@@ -30,6 +30,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case homepageRebuild
     case homepageRedesign
     case homepageSearchBar
+    case homepageStoriesRedesign
     case inactiveTabs
     case loginsVerificationEnabled
     case menuRefactor
@@ -75,6 +76,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .hntTopSitesVisualRefresh,
                 .homepageRebuild,
                 .homepageSearchBar,
+                .homepageStoriesRedesign,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
                 .menuRefactor,
@@ -149,6 +151,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .homepageRebuild,
                 .homepageRedesign,
                 .homepageSearchBar,
+                .homepageStoriesRedesign,
                 .loginsVerificationEnabled,
                 .menuRefactor,
                 .menuRefactorHint,
