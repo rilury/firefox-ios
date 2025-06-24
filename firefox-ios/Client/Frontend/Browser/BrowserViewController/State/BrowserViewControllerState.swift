@@ -185,6 +185,24 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         }
     }
 
+    static func reduceStateForToolbarAction(
+        action: ToolbarAction,
+        state: BrowserViewControllerState
+    ) -> BrowserViewControllerState {
+        switch action.actionType {
+        case ToolbarActionType.didStartEditingUrl:
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                navigationDestination: NavigationDestination(.zeroSearch)
+            )
+        default:
+            return defaultState(from: state, action: action)
+        }
+    }
+
     static func reduceStateForMicrosurveyAction(action: MicrosurveyPromptAction,
                                                 state: BrowserViewControllerState) -> BrowserViewControllerState {
         return BrowserViewControllerState(

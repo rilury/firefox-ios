@@ -161,56 +161,56 @@ final class ToolbarMiddleware: FeatureFlaggable {
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.goToHomepage)
             store.dispatchLegacy(action)
-
+            
         case .newTab:
             toolbarTelemetry.oneTapNewTabButtonTapped(isPrivate: toolbarState.isPrivateMode)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.addNewTab)
             store.dispatchLegacy(action)
-
+            
         case .qrCode:
             toolbarTelemetry.qrCodeButtonTapped(isPrivate: toolbarState.isPrivateMode)
-
+            
             if toolbarState.addressToolbar.isEditing {
                 let toolbarAction = ToolbarAction(windowUUID: action.windowUUID,
                                                   actionType: ToolbarActionType.cancelEdit)
                 store.dispatchLegacy(toolbarAction)
             }
-
+            
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showQRcodeReader)
             store.dispatchLegacy(action)
-
+            
         case .back:
             toolbarTelemetry.backButtonTapped(isPrivate: toolbarState.isPrivateMode)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.navigateBack)
             store.dispatchLegacy(action)
-
+            
         case .forward:
             toolbarTelemetry.forwardButtonTapped(isPrivate: toolbarState.isPrivateMode)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.navigateForward)
             store.dispatchLegacy(action)
-
+            
         case .tabs:
             cancelEditMode(windowUUID: action.windowUUID)
-
+            
             toolbarTelemetry.tabTrayButtonTapped(isPrivate: toolbarState.isPrivateMode)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showTabTray)
             store.dispatchLegacy(action)
-
+            
         case .trackingProtection:
             toolbarTelemetry.siteInfoButtonTapped(isPrivate: toolbarState.isPrivateMode)
             let action = GeneralBrowserAction(buttonTapped: action.buttonTapped,
                                               windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showTrackingProtectionDetails)
             store.dispatchLegacy(action)
-
+            
         case .menu:
             cancelEditMode(windowUUID: action.windowUUID)
-
+            
             toolbarTelemetry.menuButtonTapped(isPrivate: toolbarState.isPrivateMode)
             let action = GeneralBrowserAction(buttonTapped: action.buttonTapped,
                                               windowUUID: action.windowUUID,
@@ -246,8 +246,18 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
         case .search:
             toolbarTelemetry.searchButtonTapped(isPrivate: toolbarState.isPrivateMode)
-            let action = ToolbarAction(windowUUID: action.windowUUID, actionType: ToolbarActionType.didStartEditingUrl)
-            store.dispatchLegacy(action)
+            guard featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly) else {
+                let action = ToolbarAction(windowUUID: action.windowUUID, actionType: ToolbarActionType.didStartEditingUrl)
+                store.dispatchLegacy(action)
+                return
+            }
+            store.dispatchLegacy(
+                NavigationBrowserAction(
+                    navigationDestination: NavigationDestination(.zeroSearch),
+                    windowUUID: action.windowUUID,
+                    actionType: NavigationBrowserActionType.tapOnHomepageSearchBar
+                )
+            )
 
         case .dataClearance:
             toolbarTelemetry.dataClearanceButtonTapped(isPrivate: toolbarState.isPrivateMode)
