@@ -1661,7 +1661,12 @@ workflows:
     - script@1.2.1:
         inputs:
         - content: |-
+            echo "** Install iOS 18.2 runtime  **"
             sudo xcodes runtimes install "iOS 18.2"
+            echo "** Ensure iOS 18.2 runtime is installed  **"
+            xcrun simctl list runtimes | grep "iOS 18.2"
+            echo "** Ensure iPhone 16 iOS 18.2 simulator is installed  **"
+            xcrun simctl list devicetypes | grep "iPhone 16"
     - xcode-test@6.0.1:
         timeout: 3000
         inputs:
