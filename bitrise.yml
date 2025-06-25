@@ -1659,6 +1659,7 @@ workflows:
     - 3_provisioning_and_npm_installation
     steps:
     - script@1.2.1:
+        inputs:
         - content: |-
             sudo xcodes runtimes install "iOS 18.2"
     - xcode-test@6.0.1:
