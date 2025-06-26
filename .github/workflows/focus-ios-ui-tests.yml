@@ -74,6 +74,7 @@ jobs:
                 xcodebuild -version
                 ./checkout.sh
                 ./bootstrap.sh --force
+                sudo xcodes runtimes install "iOS ${{ env.ios_version }}"
             - name: Get derived data
               id: download-derived-data
               uses: actions/download-artifact@v4
