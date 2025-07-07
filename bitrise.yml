@@ -546,6 +546,8 @@ workflows:
             xcodebuild -version
             xcodebuild -showComponent MetalToolchain
             xcode-select --print-path
+            export TOOLCHAINS=/var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v17.1.5241.12.OnIPWC
+            export DEVELOPER_DIR=/var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v17.1.5241.12.OnIPWC
         title: Run bootstrap
     - swiftlint-extended@1.0.0:
         inputs:
