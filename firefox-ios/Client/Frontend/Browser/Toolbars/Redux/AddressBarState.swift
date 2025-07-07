@@ -7,21 +7,21 @@ import Redux
 import ToolbarKit
 
 struct AddressBarState: StateType, Equatable {
-    var windowUUID: WindowUUID
-    var navigationActions: [ToolbarActionConfiguration]
-    var leadingPageActions: [ToolbarActionConfiguration]
-    var trailingPageActions: [ToolbarActionConfiguration]
-    var browserActions: [ToolbarActionConfiguration]
-    var borderPosition: AddressToolbarBorderPosition?
-    var url: URL?
-    var searchTerm: String?
-    var lockIconImageName: String?
-    var lockIconNeedsTheming: Bool
-    var safeListedURLImageName: String?
-    var isEditing: Bool
-    var shouldShowKeyboard: Bool
-    var shouldSelectSearchTerm: Bool
-    var isLoading: Bool
+    let windowUUID: WindowUUID
+    let navigationActions: [ToolbarActionConfiguration]
+    let leadingPageActions: [ToolbarActionConfiguration]
+    let trailingPageActions: [ToolbarActionConfiguration]
+    let browserActions: [ToolbarActionConfiguration]
+    let borderPosition: AddressToolbarBorderPosition?
+    let url: URL?
+    let searchTerm: String?
+    let lockIconImageName: String?
+    let lockIconNeedsTheming: Bool
+    let safeListedURLImageName: String?
+    let isEditing: Bool
+    let shouldShowKeyboard: Bool
+    let shouldSelectSearchTerm: Bool
+    let isLoading: Bool
     let readerModeState: ReaderModeState?
     let didStartTyping: Bool
     let isEmptySearch: Bool
