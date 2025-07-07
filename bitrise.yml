@@ -1658,10 +1658,6 @@ workflows:
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     steps:
-    - script@1.2.1:
-        inputs:
-        - content: |-
-            xcodebuild -downloadComponent MetalToolchain
     - xcode-test@6.0.1:
         timeout: 3000
         inputs:
