@@ -543,6 +543,9 @@ workflows:
         inputs:
         - content: |-
             ./bootstrap.sh
+            xcodebuild -version
+            xcodebuild -showComponent MetalToolchain
+            xcode-select --print-path
         title: Run bootstrap
     - swiftlint-extended@1.0.0:
         inputs:
