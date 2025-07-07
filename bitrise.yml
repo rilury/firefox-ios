@@ -560,16 +560,16 @@ workflows:
                 exit 1
             fi
         title: Fail build if swiftlint fails
-    - script@1.2.1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            set -e
-            set -x
+    # - script@1.2.1:
+    #     inputs:
+    #     - content: |-
+    #         #!/usr/bin/env bash
+    #         set -e
+    #         set -x
 
-            rm /tmp/tmp.xcconfig
-            envman add --key XCODE_XCCONFIG_FILE --value ''
-        title: Remove carthage lipo workaround
+    #         rm /tmp/tmp.xcconfig
+    #         envman add --key XCODE_XCCONFIG_FILE --value ''
+    #     title: Remove carthage lipo workaround
   3_provisioning_and_npm_installation:
     steps:
     - script@1.2.1:
