@@ -1721,7 +1721,10 @@ workflows:
                 echo "Failure, the number of warnings increased"
                 exit 1
             fi
-
+    - deploy-to-bitrise-io@2.10.0:  
+        inputs:
+        - deploy_path: $BITRISE_XCODE_RAW_RESULT_TEXT_PATH
+        - is_compress: 'false'
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
   #
