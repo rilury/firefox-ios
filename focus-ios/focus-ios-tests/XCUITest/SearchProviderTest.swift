@@ -56,6 +56,7 @@ class SearchProviderTest: BaseTestCase {
         app.buttons["OverlayView.searchButton"].firstMatch.tap()
         waitForWebPageLoad()
 
+        mozWaitForElementToExist(urlbarUrltextTextField)
         urlbarUrltextTextField.tap()
         waitForValueContains(urlbarUrltextTextField, value: query)
         if iPad() {
