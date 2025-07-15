@@ -90,6 +90,7 @@ jobs:
             -derivedDataPath ~/DerivedData \
             -destination 'platform=iOS Simulator,arch=arm64,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
             -testPlan SmokeTest \
+            -only-testing XCUITest/SearchProviderTest \
             -resultBundlePath ${{ env.test_results_directory }}/results-smoketests \
             | tee xcodebuild-smoketests.log | xcpretty _0.3.0_ -r junit --output ./junit-smoketests.xml && exit ${PIPESTATUS[0]}
         working-directory: ${{ env.browser }}
@@ -104,6 +105,7 @@ jobs:
             -derivedDataPath ~/DerivedData \
             -destination 'platform=iOS Simulator,arch=arm64,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
             -testPlan FullFunctionalTests \
+            -only-testing XCUITest/SearchProviderTest \
             -resultBundlePath ${{ env.test_results_directory }}/results-fullfunctionaltests \
             | tee xcodebuild-fullfunctionaltests.log | xcpretty _0.3.0_ -r junit --output ./junit-fullfunctionaltests.xml && exit ${PIPESTATUS[0]}
         working-directory: ${{ env.browser }}

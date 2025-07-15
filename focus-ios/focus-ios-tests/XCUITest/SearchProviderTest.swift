@@ -58,6 +58,7 @@ class SearchProviderTest: BaseTestCase {
 
         mozWaitForElementToExist(urlbarUrltextTextField)
         urlbarUrltextTextField.tap()
+        mozWaitForElementToExist(app.otherElements["SearchSuggestionsPromptView"].staticTexts["Show Search Suggestions?"])
         waitForValueContains(urlbarUrltextTextField, value: query)
         if iPad() {
             app.buttons["icon delete"].tap()
