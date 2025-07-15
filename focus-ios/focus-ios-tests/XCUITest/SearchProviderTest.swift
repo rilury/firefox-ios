@@ -57,6 +57,7 @@ class SearchProviderTest: BaseTestCase {
         waitForWebPageLoad()
 
         mozWaitForElementToExist(urlbarUrltextTextField)
+        sleep(1)
         urlbarUrltextTextField.tap()
         mozWaitForElementToExist(app.otherElements["SearchSuggestionsPromptView"].staticTexts["Show Search Suggestions?"])
         waitForValueContains(urlbarUrltextTextField, value: query)
