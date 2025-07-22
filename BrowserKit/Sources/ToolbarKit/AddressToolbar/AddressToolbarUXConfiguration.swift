@@ -10,6 +10,7 @@ public struct AddressToolbarUXConfiguration {
     let browserActionsAddressBarDividerWidth: CGFloat
     let isLocationTextCentered: Bool
     let locationTextFieldTrailingPadding: CGFloat
+    let hasDarkLocationFieldBackground: Bool
     let shouldBlur: Bool
     let backgroundAlpha: CGFloat
     /// Alpha value that controls element visibility during scroll-based address bar transitions.
@@ -18,12 +19,14 @@ public struct AddressToolbarUXConfiguration {
 
     public static func experiment(backgroundAlpha: CGFloat = 1.0,
                                   scrollAlpha: CGFloat = 1.0,
-                                  shouldBlur: Bool = false) -> AddressToolbarUXConfiguration {
+                                  shouldBlur: Bool = false,
+                                  hasDarkLocationFieldBackground: Bool = false) -> AddressToolbarUXConfiguration {
         AddressToolbarUXConfiguration(
             toolbarCornerRadius: 12.0,
             browserActionsAddressBarDividerWidth: 0.0,
             isLocationTextCentered: true,
             locationTextFieldTrailingPadding: 0,
+            hasDarkLocationFieldBackground: hasDarkLocationFieldBackground,
             shouldBlur: shouldBlur,
             backgroundAlpha: backgroundAlpha,
             scrollAlpha: scrollAlpha
@@ -32,12 +35,14 @@ public struct AddressToolbarUXConfiguration {
 
     public static func `default`(backgroundAlpha: CGFloat = 1.0,
                                  scrollAlpha: CGFloat = 1.0,
-                                 shouldBlur: Bool = false) -> AddressToolbarUXConfiguration {
+                                 shouldBlur: Bool = false,
+                                 hasDarkLocationFieldBackground: Bool = false) -> AddressToolbarUXConfiguration {
         AddressToolbarUXConfiguration(
             toolbarCornerRadius: 8.0,
             browserActionsAddressBarDividerWidth: 4.0,
             isLocationTextCentered: false,
             locationTextFieldTrailingPadding: 8.0,
+            hasDarkLocationFieldBackground: hasDarkLocationFieldBackground,
             shouldBlur: shouldBlur,
             backgroundAlpha: backgroundAlpha,
             scrollAlpha: scrollAlpha
@@ -55,7 +60,9 @@ public struct AddressToolbarUXConfiguration {
 
     func locationContainerBackgroundColor(theme: some Theme) -> UIColor {
         guard !scrollAlpha.isZero else { return .clear }
-        let backgroundColor = isLocationTextCentered ? theme.colors.layerSurfaceMedium : theme.colors.layerSearch
+        let centeredBackgroundColor = hasDarkLocationFieldBackground ?
+            theme.colors.layer3 : theme.colors.layerSurfaceMedium
+        let backgroundColor = isLocationTextCentered ? centeredBackgroundColor : theme.colors.layerSearch
         return backgroundColor
     }
 

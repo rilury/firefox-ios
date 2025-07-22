@@ -33,6 +33,7 @@ final class AddressToolbarContainerModel: Equatable {
     let canShowNavigationHint: Bool
     let shouldAnimate: Bool
     let scrollAlpha: Float
+    let toolbarPosition: AddressToolbarPosition
 
     let windowUUID: UUID
 
@@ -40,9 +41,11 @@ final class AddressToolbarContainerModel: Equatable {
         let term = searchTerm ?? searchTermFromURL(url)
         let backgroundAlpha = toolbarHelper.backgroundAlpha()
         let shouldBlur = toolbarHelper.shouldBlur()
-        let uxConfiguration: AddressToolbarUXConfiguration = .experiment(backgroundAlpha: backgroundAlpha,
-                                                                         scrollAlpha: CGFloat(scrollAlpha),
-                                                                         shouldBlur: shouldBlur)
+        let uxConfiguration: AddressToolbarUXConfiguration = .experiment(
+            backgroundAlpha: backgroundAlpha,
+            scrollAlpha: CGFloat(scrollAlpha),
+            shouldBlur: shouldBlur,
+            hasDarkLocationFieldBackground: hasDarkLocationFieldBackground(toolbarPosition: toolbarPosition))
 
         var droppableUrl: URL?
         if let url, !InternalURL.isValid(url: url) {
@@ -110,8 +113,12 @@ final class AddressToolbarContainerModel: Equatable {
     ) -> AddressToolbarConfiguration {
         let backgroundAlpha = toolbarHelper.backgroundAlpha()
         let shouldBlur = toolbarHelper.shouldBlur()
-        let uxConfiguration: AddressToolbarUXConfiguration = .experiment(backgroundAlpha: backgroundAlpha,
-                                                                         shouldBlur: shouldBlur)
+        let uxConfiguration: AddressToolbarUXConfiguration = .experiment(
+            backgroundAlpha: backgroundAlpha,
+            shouldBlur: shouldBlur,
+            hasDarkLocationFieldBackground: hasDarkLocationFieldBackground(toolbarPosition: toolbarPosition)
+        )
+
         // Leading Page Actions
         let shareAction: ToolbarActionConfiguration = .init(
             actionType: .share,
@@ -229,6 +236,7 @@ final class AddressToolbarContainerModel: Equatable {
         self.scrollAlpha = state.scrollAlpha
         self.toolbarLayoutStyle = state.toolbarLayout
         self.toolbarHelper = toolbarHelper
+        self.toolbarPosition = state.toolbarPosition
     }
 
     func searchTermFromURL(_ url: URL?) -> String? {
@@ -302,6 +310,13 @@ final class AddressToolbarContainerModel: Equatable {
         } : nil
     }
 
+    private func hasDarkLocationFieldBackground(
+        userInterfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
+        toolbarPosition: AddressToolbarPosition) -> Bool {
+        let isiPad = userInterfaceIdiom == .pad
+        return !isiPad && toolbarPosition == .top
+    }
+
     static func == (lhs: AddressToolbarContainerModel, rhs: AddressToolbarContainerModel) -> Bool {
         lhs.navigationActions == rhs.navigationActions &&
         lhs.trailingPageActions == rhs.trailingPageActions &&
@@ -325,6 +340,7 @@ final class AddressToolbarContainerModel: Equatable {
         lhs.canShowNavigationHint == rhs.canShowNavigationHint &&
         lhs.shouldAnimate == rhs.shouldAnimate &&
         lhs.scrollAlpha == rhs.scrollAlpha &&
+        lhs.toolbarPosition == rhs.toolbarPosition &&
 
         lhs.windowUUID == rhs.windowUUID
     }
