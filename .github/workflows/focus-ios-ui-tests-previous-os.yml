@@ -6,7 +6,7 @@ on:
 
 env:
     browser: focus-ios
-    xcode_version: 16.3
+    xcode_version: 26.0
     xcodebuild_scheme: Focus
     xcodebuild_target: XCUITest
     test_results_directory: /Users/runner/tmp
@@ -20,6 +20,8 @@ jobs:
       max-parallel: 1
       matrix:
         include:
+          - ios_version: 18.3.1
+            ios_simulator: iPhone 16
           - ios_version: 17.5
             ios_simulator: iPhone 15
           - ios_version: 16.4
