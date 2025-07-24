@@ -59,8 +59,7 @@ enum MenuButtonToastAction {
 final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol,
                             FeatureFlaggable,
                             CanRemoveQuickActionBookmark,
-                            AppVersionUpdateCheckerProtocol,
-                            BookmarksRefactorFeatureFlagProvider {
+                            AppVersionUpdateCheckerProtocol {
     typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
 
     private let isHomePage: Bool
@@ -90,6 +89,7 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
     ///   - buttonView: the view from which the menu will be shown
     ///   - toastContainer: the view hosting a toast alert
     ///   - showFXASyncAction: the closure that will be executed for the sync action in the library section
+    @MainActor
     init(profile: Profile,
          tabManager: TabManager,
          buttonView: UIButton,
@@ -757,7 +757,7 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
 
     private func getBookmarkAction() -> SingleActionViewModel {
         guard isBookmarked else { return getAddBookmarkAction() }
-        return isBookmarkRefactorEnabled ? getEditBookmarkAction() : getRemoveBookmarkAction()
+        return getEditBookmarkAction()
     }
 
     private func getAddBookmarkAction() -> SingleActionViewModel {

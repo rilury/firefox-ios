@@ -33,7 +33,6 @@ class BrowserViewController: UIViewController,
                              BrowserFrameInfoProvider,
                              NavigationToolbarContainerDelegate,
                              AddressToolbarContainerDelegate,
-                             BookmarksRefactorFeatureFlagProvider,
                              BookmarksHandlerDelegate,
                              FeatureFlaggable,
                              CanRemoveQuickActionBookmark,
@@ -936,11 +935,7 @@ class BrowserViewController: UIViewController,
                 .removeFromReadingList:
             showToast()
         case .addBookmark(let urlString):
-            if isBookmarkRefactorEnabled {
-                showBookmarkToast(urlString: urlString, action: .add)
-            } else {
-                showToast()
-            }
+            showBookmarkToast(urlString: urlString, action: .add)
         default:
             let viewModel = ButtonToastViewModel(
                 labelText: toast.title,
@@ -1017,9 +1012,17 @@ class BrowserViewController: UIViewController,
         listenForThemeChange(view)
         setupAccessibleActions()
 
-        clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs,
-                                                                tabManager: tabManager)
-        clipboardBarDisplayHandler?.delegate = self
+        if #available(iOS 16.0, *) {
+            let clipboardHandler = DefaultClipboardBarDisplayHandler(prefs: profile.prefs,
+                                                                     windowUUID: windowUUID)
+            clipboardHandler.delegate = self
+            self.clipboardBarDisplayHandler = clipboardHandler
+        } else {
+            let clipboardHandler = LegacyClipboardBarDisplayHandler(prefs: profile.prefs,
+                                                                    tabManager: tabManager)
+            clipboardHandler.delegate = self
+            self.clipboardBarDisplayHandler = clipboardHandler
+        }
 
         navigationToolbarContainer.toolbarDelegate = self
         scrollController.header = header
@@ -2173,12 +2176,9 @@ class BrowserViewController: UIViewController,
     private func showBookmarkToast(urlString: String? = nil, title: String? = nil, action: BookmarkAction) {
         switch action {
         case .add:
-            if !isBookmarkRefactorEnabled {
-                showToast(urlString, title, message: .LegacyAppMenu.AddBookmarkConfirmMessage, toastAction: .bookmarkPage)
-            }
             // Get the folder title using the recent bookmark folder pref
             // Special case for mobile folder since it's title is "mobile" and we want to display it as "Bookmarks"
-            else if let recentBookmarkFolderGuid = profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder),
+            if let recentBookmarkFolderGuid = profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder),
                 recentBookmarkFolderGuid != BookmarkRoots.MobileFolderGUID {
                 profile.places.getBookmark(guid: recentBookmarkFolderGuid).uponQueue(.main) { result in
                     guard let bookmarkFolder = result.successValue as? BookmarkFolderData else { return }
@@ -2211,20 +2211,7 @@ class BrowserViewController: UIViewController,
                   let parentGuid = bookmarkItem.parentGUID else { return }
             self.profile.places.getBookmark(guid: parentGuid).uponQueue(.main) { result in
                 guard let parentFolder = result.successValue as? BookmarkFolderData else { return }
-
-                if self.isBookmarkRefactorEnabled {
-                    self.navigationHandler?.showEditBookmark(parentFolder: parentFolder, bookmark: bookmarkItem)
-                } else {
-                    let detailController = LegacyBookmarkDetailPanel(profile: self.profile,
-                                                                     windowUUID: self.windowUUID,
-                                                                     bookmarkNode: bookmarkItem,
-                                                                     parentBookmarkFolder: parentFolder,
-                                                                     presentedFromToast: true,
-                                                                     deleteBookmark: {})
-                    let controller: DismissableNavigationViewController
-                    controller = DismissableNavigationViewController(rootViewController: detailController)
-                    self.present(controller, animated: true, completion: nil)
-                }
+                self.navigationHandler?.showEditBookmark(parentFolder: parentFolder, bookmark: bookmarkItem)
             }
         }
     }
@@ -3914,7 +3901,7 @@ class BrowserViewController: UIViewController,
     }
 }
 
-extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
+extension BrowserViewController: LegacyClipboardBarDisplayHandlerDelegate {
     func shouldDisplay(clipBoardURL url: URL) {
         let viewModel = ButtonToastViewModel(
             labelText: .GoToCopiedLink,
@@ -3934,9 +3921,11 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
         )
 
         clipboardBarDisplayHandler?.clipboardToast = toast
-        show(toast: toast, duration: ClipboardBarDisplayHandler.UX.toastDelay)
+        show(toast: toast, duration: LegacyClipboardBarDisplayHandler.UX.toastDelay)
     }
+}
 
+extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
     @available(iOS 16.0, *)
     func shouldDisplay() {
         let viewModel = ButtonToastViewModel(
@@ -3953,15 +3942,14 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
         )
 
         clipboardBarDisplayHandler?.clipboardToast = toast
-        show(toast: toast, duration: ClipboardBarDisplayHandler.UX.toastDelay)
+        show(toast: toast, duration: DefaultClipboardBarDisplayHandler.UX.toastDelay)
     }
 
     override func paste(itemProviders: [NSItemProvider]) {
         for provider in itemProviders where provider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
-            _ = provider.loadObject(ofClass: URL.self) { [weak self] url, error in
-                let isPrivate = self?.tabManager.selectedTab?.isPrivate ?? false
-
-                DispatchQueue.main.async {
+            _ = provider.loadObject(ofClass: URL.self) { url, _ in
+                DispatchQueue.main.async { [weak self] in
+                    let isPrivate = self?.tabManager.selectedTab?.isPrivate ?? false
                     self?.openURLInNewTab(url, isPrivate: isPrivate)
                 }
             }
@@ -4693,7 +4681,7 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 
 extension BrowserViewController {
     /// Used to get the context menu save image in the context menu, shown from long press on webview links
-    func getImageData(_ url: URL, success: @escaping (Data) -> Void) {
+    func getImageData(_ url: URL, success: @Sendable @escaping (Data) -> Void) {
         makeURLSession(
             userAgent: UserAgent.fxaUserAgent,
             configuration: URLSessionConfiguration.defaultMPTCP).dataTask(with: url

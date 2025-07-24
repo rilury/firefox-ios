@@ -30,7 +30,6 @@ class BrowserCoordinator: BaseCoordinator,
                           MainMenuCoordinatorDelegate,
                           ETPCoordinatorSSLStatusDelegate,
                           SearchEngineSelectionCoordinatorDelegate,
-                          BookmarksRefactorFeatureFlagProvider,
                           FeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
@@ -228,8 +227,7 @@ class BrowserCoordinator: BaseCoordinator,
             profile: profile,
             windowUUID: windowUUID,
             libraryCoordinator: self,
-            libraryNavigationHandler: nil,
-            isBookmarkRefactorEnabled: isBookmarkRefactorEnabled
+            libraryNavigationHandler: nil
         )
         add(child: bookmarksCoordinator)
         bookmarksCoordinator.start(parentFolder: parentFolder, bookmark: bookmark)
@@ -1251,7 +1249,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - Private helpers
 
-    private func tryDownloadingTabFileToShare(shareType: ShareType) async -> ShareType {
+    nonisolated private func tryDownloadingTabFileToShare(shareType: ShareType) async -> ShareType {
         // We can only try to download files for `.tab` type shares that have a TemporaryDocument
         guard case let ShareType.tab(_, tab) = shareType,
               let temporaryDocument = tab.temporaryDocument,

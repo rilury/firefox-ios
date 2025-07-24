@@ -28,8 +28,8 @@ enum BookmarkAction {
     case remove
 }
 
+@MainActor
 class HomepageContextMenuHelper: HomepageContextMenuProtocol,
-                                 BookmarksRefactorFeatureFlagProvider,
                                  CanRemoveQuickActionBookmark {
     typealias ContextHelperDelegate = HomepageContextMenuHelperDelegate & UIPopoverPresentationControllerDelegate
     private let profile: Profile
