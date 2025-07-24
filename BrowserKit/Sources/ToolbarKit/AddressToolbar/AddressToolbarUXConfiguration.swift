@@ -66,6 +66,35 @@ public struct AddressToolbarUXConfiguration {
         return backgroundColor
     }
 
+    func locationViewBackgroundColor(theme: some Theme) -> UIColor {
+        return locationContainerBackgroundColor(theme: theme)
+    }
+
+    func locationViewGradientColors(theme: some Theme) -> [CGColor] {
+        if isLocationTextCentered {
+            return Gradient(
+                colors: [
+                    theme.colors.layerSurfaceMedium.withAlphaComponent(1),
+                    theme.colors.layerSurfaceMedium.withAlphaComponent(0)
+                ]
+            ).cgColors
+        } else {
+            return theme.colors.layerGradientURL.cgColors.reversed()
+        }
+    }
+
+    func locationViewPlaceholderColor(theme: some Theme) -> UIColor {
+        return isLocationTextCentered ? theme.colors.textPrimary : theme.colors.textSecondary
+    }
+
+    func etpIconImageColor(theme: some Theme) -> UIColor {
+        return isLocationTextCentered ? theme.colors.textSecondary : theme.colors.textPrimary
+    }
+
+    func etpIconTintColor(theme: some Theme) -> UIColor {
+        return isLocationTextCentered ? theme.colors.textSecondary : theme.colors.textPrimary
+    }
+
     public func locationViewVerticalPaddings(addressBarPosition: AddressToolbarPosition) -> (top: CGFloat, bottom: CGFloat) {
         return switch addressBarPosition {
         case .top:

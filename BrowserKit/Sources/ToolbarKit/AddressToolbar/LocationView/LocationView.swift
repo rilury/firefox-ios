@@ -45,6 +45,7 @@ final class LocationView: UIView,
 
     private var tapGestureRecognizer: UITapGestureRecognizer?
     private var longPressGestureRecognizer: UILongPressGestureRecognizer?
+    private var uxConfig: AddressToolbarUXConfiguration?
 
     /// Determines if the URL text field's content is wider than the visible area, accounting for a safe offset.
     /// An additional offset (default is 0) used when reader mode is available,
@@ -151,6 +152,7 @@ final class LocationView: UIView,
         searchEngineContentView = isUnifiedSearchEnabled
                                   ? dropDownSearchEngineView
                                   : plainSearchEngineView
+        self.uxConfig = uxConfig
 
         searchEngineContentView.configure(
             config,
@@ -667,33 +669,31 @@ final class LocationView: UIView,
     func applyTheme(theme: Theme) {
         self.theme = theme
         let colors = theme.colors
-        // Get the appearance based on `isURLTextFieldCentered`
-        let appearance: LocationViewAppearanceConfiguration = if isURLTextFieldCentered {
-            .getAppearanceForVersion(theme: theme)
-        } else {
-            .getAppearanceForBaseline(theme: theme)
-        }
 
         urlTextFieldColor = colors.textPrimary
         urlTextFieldSubdomainColor = colors.textSecondary
-        gradientLayer.colors = appearance.gradientColors
         searchEngineContentView.applyTheme(theme: theme)
-        iconContainerBackgroundView.backgroundColor = scrollAlpha.isZero ? nil : appearance.backgroundColor
-        lockIconButton.backgroundColor = scrollAlpha.isZero ? nil : appearance.backgroundColor
-        urlTextField.applyTheme(theme: theme)
-        urlTextField.attributedPlaceholder = NSAttributedString(
-            string: urlTextField.placeholder ?? "",
-            attributes: [.foregroundColor: appearance.placeholderColor]
-        )
-
         safeListedURLImageColor = colors.iconAccentBlue
-        lockIconButton.tintColor = appearance.etpIconTintColor
-        lockIconImageColor = appearance.etpIconImageColor
+        urlTextField.applyTheme(theme: theme)
 
         setLockIconImage()
+
         // Applying the theme to urlTextField can cause the url formatting to get removed
         // so we apply it again
         formatAndTruncateURLTextField()
+
+        guard let uxConfig else { return }
+
+        gradientLayer.colors = uxConfig.locationViewGradientColors(theme: theme)
+        iconContainerBackgroundView.backgroundColor = uxConfig.locationViewBackgroundColor(theme: theme)
+        lockIconButton.backgroundColor = uxConfig.locationViewBackgroundColor(theme: theme)
+        lockIconButton.tintColor = uxConfig.etpIconTintColor(theme: theme)
+        lockIconImageColor = uxConfig.etpIconImageColor(theme: theme)
+
+        urlTextField.attributedPlaceholder = NSAttributedString(
+            string: urlTextField.placeholder ?? "",
+            attributes: [.foregroundColor: uxConfig.locationViewPlaceholderColor(theme: theme)]
+        )
     }
 
     // MARK: - UIGestureRecognizerDelegate
