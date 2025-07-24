@@ -128,7 +128,7 @@ public class BrowserAddressToolbar: UIView,
         addressBarPosition = toolbarPosition
         previousConfiguration = config
         configureUX(config: config.uxConfiguration, toolbarPosition: toolbarPosition)
-        updateSpacing(uxConfig: config.uxConfiguration, leading: leadingSpace, trailing: trailingSpace)
+        updateSpacing(leading: leadingSpace, trailing: trailingSpace)
         configure(config: config,
                   isUnifiedSearchEnabled: isUnifiedSearchEnabled,
                   addressBarPosition: toolbarPosition,
@@ -343,9 +343,7 @@ public class BrowserAddressToolbar: UIView,
         }
     }
 
-    private func updateSpacing(uxConfig: AddressToolbarUXConfiguration,
-                               leading: CGFloat,
-                               trailing: CGFloat) {
+    private func updateSpacing(leading: CGFloat, trailing: CGFloat) {
         leadingNavigationActionStackConstraint?.constant = leading
         trailingBrowserActionStackConstraint?.constant = -trailing
     }
