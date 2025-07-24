@@ -6,7 +6,7 @@ on:
 
 env:
     browser: focus-ios
-    xcode_version: '26.0'
+    xcode_version: 16.3
     xcodebuild_scheme: Focus
     xcodebuild_target: XCUITest
     test_results_directory: /Users/runner/tmp
@@ -20,7 +20,7 @@ jobs:
       max-parallel: 1
       matrix:
         include:
-          - ios_version: 18.3
+          - ios_version: 18.3.1
             ios_simulator: iPhone 16
           - ios_version: 17.5
             ios_simulator: iPhone 15
@@ -59,11 +59,7 @@ jobs:
           else
             echo "Install iOS ${{ matrix.ios_version }} runtime"
             sudo xcodes runtimes install "iOS ${{ matrix.ios_version }}"
-            # VER=$(echo "${{ matrix.ios_version }}" | awk -F. '{print $1 "-" $2}')
-            # xcrun simctl create "${{ matrix.ios_simulator }}" "${{ matrix.ios_simulator }}" "com.apple.CoreSimulator.SimRuntime.iOS-$VER"
           fi
-          xcrun simctl list runtimes
-          xcrun simctl list
       - name: Build Focus
         id: compile
         run: |
@@ -72,7 +68,7 @@ jobs:
             -scheme ${{ env.xcodebuild_scheme }} \
             -target ${{ env.xcodebuild_target }} \
             -derivedDataPath ~/DerivedData \
-            -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
+            -destination 'platform=iOS Simulator,arch=arm64,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
             COMPILER_INDEX_STORE_ENABLE=NO CODE_SIGN_IDENTITY= CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO ARCH="arm64"
         working-directory:  ${{ env.browser }}
       - name: Run smoke tests
@@ -85,7 +81,7 @@ jobs:
             -scheme ${{ env.xcodebuild_scheme }} \
             -target ${{ env.xcodebuild_target }} \
             -derivedDataPath ~/DerivedData \
-            -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
+            -destination 'platform=iOS Simulator,arch=arm64,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
             -testPlan SmokeTest \
             -only-testing:XCUITest/CopyPasteTest/testPastenGo | xcpretty _0.3.0_
           xcodebuild \
@@ -93,7 +89,7 @@ jobs:
             -scheme ${{ env.xcodebuild_scheme }} \
             -target ${{ env.xcodebuild_target }} \
             -derivedDataPath ~/DerivedData \
-            -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
+            -destination 'platform=iOS Simulator,arch=arm64,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
             -testPlan SmokeTest \
             -resultBundlePath ${{ env.test_results_directory }}/results-smoketests \
             | tee xcodebuild-smoketests.log | xcpretty _0.3.0_ -r junit --output ./junit-smoketests.xml && exit ${PIPESTATUS[0]}
@@ -107,7 +103,7 @@ jobs:
             -scheme ${{ env.xcodebuild_scheme }} \
             -target ${{ env.xcodebuild_target }} \
             -derivedDataPath ~/DerivedData \
-            -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
+            -destination 'platform=iOS Simulator,arch=arm64,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
             -testPlan FullFunctionalTests \
             -resultBundlePath ${{ env.test_results_directory }}/results-fullfunctionaltests \
             | tee xcodebuild-fullfunctionaltests.log | xcpretty _0.3.0_ -r junit --output ./junit-fullfunctionaltests.xml && exit ${PIPESTATUS[0]}
