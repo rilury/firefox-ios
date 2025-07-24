@@ -821,9 +821,29 @@ class BrowserViewController: UIViewController,
     // MARK: - Summarize
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         super.motionEnded(motion, with: event)
-        guard motion == .motionShake, isSummarizeFeatureEnabled else { return }
-        guard let selectedTab = tabManager.selectedTab, !selectedTab.isFxHomeTab else { return }
-        navigationHandler?.showSummarizePanel()
+        // 0. Check if feature is enabled
+        guard motion == .motionShake, isSummarizeFeatureEnabled,
+            !tabManager.selectedTab!.isFxHomeTab,
+            let webView = tabManager.selectedTab?.webView else { return }
+
+        #if canImport(FoundationModels)
+        // 1. Check if the page can be summarized
+        Task {
+            let summarizationChecker = SummarizationChecker()
+            // TODO: Make 3000 a constant and add comment why we have 3000 words limit
+            let checkResult = await summarizationChecker.check(on: webView, maxWords: 3000)
+            if checkResult.canSummarize, let pageText = checkResult.textContent {
+                // 2. Show the summarize panel with loading animation
+                navigationHandler?.showSummarizePanel()
+
+                let summarizer = FoundationModelsSummarizer()
+                summarizer.summarize(prompt: "Summarize this text in two sentences", text: pageText)
+
+                // 3. Update the summarize panel with the summarized text
+                navigationHandler?.updateSummarizePanel(with: "fooooo bla boo")
+            }
+        }
+        #endif
     }
 
     // MARK: - BrowserContentHiding

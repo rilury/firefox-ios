@@ -22,6 +22,8 @@ class SummarizeCoordinator: BaseCoordinator {
     private weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     private let windowUUID: WindowUUID
 
+    private weak var summarizeController: SummarizeController?
+
     init(
         browserSnapshot: UIImage,
         browserSnapshotTopOffset: CGFloat,
@@ -61,6 +63,11 @@ class SummarizeCoordinator: BaseCoordinator {
         let controller = SummarizeController(windowUUID: windowUUID, viewModel: model)
         controller.modalTransitionStyle = .crossDissolve
         controller.modalPresentationStyle = .overFullScreen
+        self.summarizeController = controller
         router.present(controller, animated: true)
+    }
+
+    func updateSummary(with summary: String) {
+        summarizeController?.finishLoading(with: summary)
     }
 }

@@ -112,6 +112,9 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 
     @MainActor
     func showSummarizePanel()
+
+    @MainActor
+    func updateSummarizePanel(with summary: String)
 }
 
 extension BrowserNavigationHandler {

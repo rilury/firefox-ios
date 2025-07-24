@@ -250,12 +250,7 @@ public class SummarizeController: UIViewController, Themeable {
         UIView.animate(withDuration: UX.initialTransformAnimationDuration, delay: 0.0, options: [], animations: {
             self.tabSnapshot.layer.cornerRadius = UX.tabSnapshotCornerRadius
             self.loadingLabel.alpha = 1.0
-        }) { _ in
-            // TODO: - FXIOS-12858 replace this demo code with the actual backend API
-            DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
-                self.showSummary()
-            }
-        }
+        }) { _ in }
     }
 
     private func showSummary() {
@@ -278,6 +273,20 @@ public class SummarizeController: UIViewController, Themeable {
                 self?.view.bringSubviewToFront(tabSnapshotView)
             }
         }
+    }
+
+    public func finishLoading(with summary: String) {
+        let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
+        let baseFont = FXFontStyles.Regular.body.scaledFont()
+        let headerFont = FXFontStyles.Regular.title1.scaledFont()
+        let baseColor = theme.colors.textPrimary
+        let markdownParser = MarkdownParser(font: baseFont, color: baseColor)
+        /// NOTE: The content is produced by an LLM; generated links may be unsafe or unreachable.
+        /// To keep the MVP safe, link rendering is disabled.
+        markdownParser.enabledElements =  .all.subtracting([.link, .automaticLink])
+        markdownParser.header.font = headerFont
+        summaryView.attributedText = markdownParser.parse(summary)
+        showSummary()
     }
 
     override public func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {

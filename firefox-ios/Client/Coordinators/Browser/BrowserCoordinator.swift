@@ -1097,6 +1097,13 @@ class BrowserCoordinator: BaseCoordinator,
         coordinator.start()
     }
 
+    func updateSummarizePanel(with summary: String) {
+        let summarizeCoordinator = childCoordinators.first(where: { $0 is SummarizeCoordinator })
+        if let summarizeCoordinator = summarizeCoordinator as? SummarizeCoordinator {
+            summarizeCoordinator.updateSummary(with: summary)
+        }
+    }
+
     // MARK: Microsurvey
 
     func showMicrosurvey(model: MicrosurveyModel) {
