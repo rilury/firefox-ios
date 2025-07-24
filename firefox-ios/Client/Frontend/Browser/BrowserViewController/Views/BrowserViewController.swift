@@ -553,6 +553,10 @@ class BrowserViewController: UIViewController,
         }
 
         updateBlurViews(scrollOffset: scrollOffset)
+
+        // When switching from top to bottom toolbar we need to apply the theme again
+        // as top and bottom toolbars use different colors
+        addressToolbarContainer.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
     }
 
     private func updateBlurViews(scrollOffset: CGFloat? = nil) {
