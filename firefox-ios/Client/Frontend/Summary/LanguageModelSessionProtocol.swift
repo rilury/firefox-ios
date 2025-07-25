@@ -16,8 +16,7 @@ protocol LanguageModelSessionProtocol {
     @discardableResult
     func respond(
         to prompt: Prompt,
-        options: GenerationOptions,
-        isolation: isolated (any Actor)?
+        options: GenerationOptions
     ) async throws -> any LanguageModelResponseProtocol
 
     func streamResponse(

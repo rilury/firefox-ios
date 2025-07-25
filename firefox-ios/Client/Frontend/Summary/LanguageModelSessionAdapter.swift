@@ -24,11 +24,10 @@ final class LanguageModelSessionAdapter: LanguageModelSessionProtocol {
 
     func respond(
         to prompt: Prompt,
-        options: GenerationOptions,
-        isolation: isolated (any Actor)?
+        options: GenerationOptions
     ) async throws -> any LanguageModelResponseProtocol {
         let realResponse: LanguageModelSession.Response<String> =
-            try await realSession.respond(to: prompt, options: options, isolation: isolation)
+            try await realSession.respond(to: prompt, options: options)
         return realResponse
     }
 

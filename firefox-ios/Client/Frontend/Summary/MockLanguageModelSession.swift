@@ -24,8 +24,7 @@ final class MockLanguageModelSession: LanguageModelSessionProtocol {
 
     func respond(
         to prompt: Prompt,
-        options: GenerationOptions,
-        isolation: isolated (any Actor)?
+        options: GenerationOptions
     ) async throws -> any LanguageModelResponseProtocol {
         if let error = respondWithError { throw error }
         return MockLanguageModelResponseProtocol(content: respondWith.joined(separator: " "), transcriptEntries: [])

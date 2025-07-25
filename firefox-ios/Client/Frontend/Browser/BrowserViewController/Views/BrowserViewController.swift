@@ -821,26 +821,41 @@ class BrowserViewController: UIViewController,
     // MARK: - Summarize
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         super.motionEnded(motion, with: event)
-        // 0. Check if feature is enabled
+        
+        // Check if feature is enabled via Nimbus
         guard motion == .motionShake, isSummarizeFeatureEnabled,
             !tabManager.selectedTab!.isFxHomeTab,
             let webView = tabManager.selectedTab?.webView else { return }
 
+        triggerSummarization(for: webView)
+    }
+
+    private func triggerSummarization(for webView: WKWebView) {
+        // Compile-time check for FoundationModels
+        // This allows us to use the summarization feature only if FoundationModels is available.
+        // We can't build on sdks < 26 without this
+        // Once BR starts building on xcode 26, we can remove this check and only rely on runtime availability
         #if canImport(FoundationModels)
-        // 1. Check if the page can be summarized
-        Task {
-            let summarizationChecker = SummarizationChecker()
-            // TODO: Make 3000 a constant and add comment why we have 3000 words limit
-            let checkResult = await summarizationChecker.check(on: webView, maxWords: 3000)
-            if checkResult.canSummarize, let pageText = checkResult.textContent {
-                // 2. Show the summarize panel with loading animation
+        if #available(iOS 26, *) {
+            Task {
+                let summarizationChecker = SummarizationChecker()
+                // TODO: Make this a constant (e.g. `SummarizationConstants.maxWords`)
+                let checkResult = await summarizationChecker.check(on: webView, maxWords: 3000)
+                
+                // Reasons include page is not readable, page has too many words, page is not in english...
+                guard checkResult.canSummarize, let pageText = checkResult.textContent else { return }
                 navigationHandler?.showSummarizePanel()
 
-                let summarizer = FoundationModelsSummarizer()
-                summarizer.summarize(prompt: "Summarize this text in two sentences", text: pageText)
-
-                // 3. Update the summarize panel with the summarized text
-                navigationHandler?.updateSummarizePanel(with: "fooooo bla boo")
+                do {
+                    let summarizer = FoundationModelsSummarizer()
+                    let summary = try await summarizer.summarize(prompt: instructions, text: pageText)
+                    navigationHandler?.updateSummarizePanel(with: summary)
+                } catch {
+                    print(error)
+                    navigationHandler?.updateSummarizePanel(
+                        with: "Error (printing raw error for now): \(error.localizedDescription)"
+                    )
+                }
             }
         }
         #endif
