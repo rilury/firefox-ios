@@ -111,6 +111,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
                    level: .info,
                    category: .lifecycle)
 
+        // Laurie - This crashes as expected
+//        assert(false)
+
+        // Laurie - This crashes too as expected
+//        DispatchQueue.global().async {
+//            assert(Thread.isMainThread)
+//        }
+
         return true
     }
 

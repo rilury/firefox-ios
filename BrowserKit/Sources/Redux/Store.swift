@@ -83,8 +83,18 @@ public class Store<State: StateType & Sendable>: DefaultDispatchStore {
         processQueuedActions()
     }
 
+    // Steps to reproduce
+    // 1. Open the tab tray
+    // 2. Long press on a tab to open the tab peek
+    // 3. This will trigger this function on a background thread
     @MainActor
     public func dispatch(_ action: Action) {
+        let isMainThread = Thread.isMainThread
+        print("Laurie ### Thread: \(Thread.current), isMain: \(isMainThread)")
+        assertionFailure("I am not main thread, failure!") // does not crash
+        assert(isMainThread) // does not crash
+//        assert(false) // does not crash - I needed to comment out otherwise I cannot commit
+        precondition(isMainThread) // crashes
         logger.log("Dispatched action: \(action.debugDescription)", level: .info, category: .redux)
         actionQueue.append(action)
         processQueuedActions()
