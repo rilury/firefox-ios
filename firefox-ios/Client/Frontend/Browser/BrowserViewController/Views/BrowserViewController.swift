@@ -324,8 +324,12 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
 
-    var isSummarizeFeatureEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.summarizer, checking: .buildOnly)
+    var isLitellmSummarizerEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.litellmSummarizer, checking: .buildOnly)
+    }
+
+    var isAppleSummarizerEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.appleSummarizer, checking: .buildOnly)
     }
 
     // MARK: Computed vars
@@ -821,16 +825,42 @@ class BrowserViewController: UIViewController,
     // MARK: - Summarize
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         super.motionEnded(motion, with: event)
-
         // Check if feature is enabled via Nimbus
-        guard motion == .motionShake, isSummarizeFeatureEnabled,
-            !tabManager.selectedTab!.isFxHomeTab,
+        guard motion == .motionShake, !tabManager.selectedTab!.isFxHomeTab,
             let webView = tabManager.selectedTab?.webView else { return }
 
-        triggerSummarization(for: webView)
+        if isAppleSummarizerEnabled {
+            triggerAppleSummarization(for: webView)
+        } else if isLitellmSummarizerEnabled {
+            triggerLitellmSummarization(for: webView)
+        }
     }
 
-    private func triggerSummarization(for webView: WKWebView) {
+    private let defaultSummarizationInstructions = """
+    You are an expert at creating mobile-optimized summaries.
+    Process:
+    Step 1: Identify the type of content.
+    Step 2: Based on content type, prioritize:
+    • Recipe - Servings, Total time, Ingredients list, Key steps, Tips.
+    • News - What happened, when, where.
+    • How-to - Total time, Materials, Key steps, Warnings.
+    • Review - Bottom line rating, price.
+    • Opinion - Main arguments, Key evidence.
+    • Personal Blog - Author, main points.
+    • Fiction - Author, summary of plot.
+    • All other content types - Provide a brief summary of no more than 6 sentences.
+    Step 3: Format for mobile using concise language and paragraphs with 3 sentences maximum.
+    Bold critical details (numbers, warnings, key terms). Use markdown formatting.
+    """
+
+    private func checkSummarization(for webView: WKWebView, maxWords: Int) async -> String? {
+        let summarizationChecker = SummarizationChecker()
+        let checkResult = await summarizationChecker.check(on: webView, maxWords: maxWords)
+        guard checkResult.canSummarize, let pageText = checkResult.textContent else { return nil }
+        return pageText
+    }
+
+    private func triggerAppleSummarization(for webView: WKWebView) {
         // Compile-time check for FoundationModels
         // This allows us to use the summarization feature only if FoundationModels is available.
         // We can't build on sdks < 26 without this
@@ -838,48 +868,66 @@ class BrowserViewController: UIViewController,
         #if canImport(FoundationModels)
         if #available(iOS 26, *) {
             Task {
-                let summarizationChecker = SummarizationChecker()
-                // TODO: Make this a constant (e.g. `SummarizationConstants.maxWords`)
-                let checkResult = await summarizationChecker.check(on: webView, maxWords: 3000)
-
-                // Reasons include page is not readable, page has too many words, page is not in english...
-                guard checkResult.canSummarize, let pageText = checkResult.textContent else { return }
+                guard let pageText = await checkSummarization(for: webView, maxWords: 3000) else { return }
                 navigationHandler?.showSummarizePanel()
-
-                // TODO: Move this to the class itself later.
-                let instructions = """
-                You are an expert at creating mobile-optimized summaries.
-                Process:
-                Step 1: Identify the type of content.
-                Step 2: Based on content type, prioritize:
-                • Recipe - Servings, Total time, Ingredients list, Key steps, Tips.
-                • News - What happened, when, where.
-                • How-to - Total time, Materials, Key steps, Warnings.
-                • Review - Bottom line rating, price.
-                • Opinion - Main arguments, Key evidence.
-                • Personal Blog - Author, main points.
-                • Fiction - Author, summary of plot.
-                • All other content types - Provide a brief summary of no more than 6 sentences.
-                Step 3: Format for mobile using concise language and paragraphs with 3 sentences maximum.
-                Bold critical details (numbers, warnings, key terms). Use markdown format for headings, bold, lists.
-                """
                 do {
                     let summarizer = FoundationModelsSummarizer()
-                    let summary = try await summarizer.summarize(prompt: instructions, text: pageText)
+                    let summary = try await summarizer.summarize(
+                        prompt: defaultSummarizationInstructions,
+                        text: pageText
+                    )
                     navigationHandler?.updateSummarizePanel(with: summary)
                 } catch let summarizerError as SummarizerError {
-                    navigationHandler?.updateSummarizePanel(
-                        with: "**\(summarizerError.userMessage)**"
-                    )
+                    navigationHandler?.updateSummarizePanel(with: "**\(summarizerError.userMessage)**")
                 } catch {
-                    // Should be unreachable, but just in case
                     navigationHandler?.updateSummarizePanel(
-                        with: "**This should not happen: \(error.localizedDescription)**"
+                        with: "**Unexpected error: \(error.localizedDescription)**"
                     )
                 }
             }
         }
         #endif
+    }
+
+    private func triggerLitellmSummarization(for webView: WKWebView) {
+        Task {
+            guard let apiKey = getEnvValues(for: "LiteLLMAPIKey"),
+                  let endpoint = getEnvValues(for: "LiteLLMAPIEndpoint"),
+                  let model = getEnvValues(for: "LiteLLMAPIModel") else {
+                // Skip summarization if any of the required values are missing
+                return
+            }
+
+            guard let pageText = await checkSummarization(for: webView, maxWords: 5000) else { return }
+            navigationHandler?.showSummarizePanel()
+
+            let sysMsg = LiteLLMMessage(role: .system, content: defaultSummarizationInstructions)
+            let userMsg = LiteLLMMessage(role: .user, content: pageText)
+
+            let options = LiteLLMChatOptions(
+                model: model,
+                maxTokens: 1000,
+                stream: false
+            )
+
+            let summarizer = LiteLLMClient(apiKey: apiKey, baseURL: URL(string: endpoint)!)
+            summarizer.requestChatCompletion(messages: [sysMsg, userMsg], options: options) { result in
+                switch result {
+                case .success(let summary):
+                    DispatchQueue.main.async {
+                        self.navigationHandler?.updateSummarizePanel(with: summary)
+                    }
+                case .failure:
+                    DispatchQueue.main.async {
+                        self.navigationHandler?.updateSummarizePanel(with: "**Error summarizing page**")
+                    }
+                }
+            }
+        }
+    }
+
+    func getEnvValues(for key: String) -> String? {
+        return Bundle.main.object(forInfoDictionaryKey: key) as? String
     }
 
     // MARK: - BrowserContentHiding
