@@ -26,14 +26,14 @@ enum SummarizerError: Error, LocalizedError, Sendable {
     // TODO(FXIOS-12934): Localize these strings
     var userMessage: String {
         switch self {
-        case .tooLong: return ""
-        case .rateLimited: return ""
-        case .busy: return ""
-        case .safetyBlocked: return ""
-        case .unsupportedLanguage: return ""
-        case .cancelled: return ""
-        case .invalidResponse: return ""
-        case .unknown: return ""
+        case .tooLong: return "The page content is too long to summarize."
+        case .rateLimited: return "You are being rate limited. Please try again later."
+        case .busy: return "The summarization service is currently busy. Please try again later."
+        case .safetyBlocked: return "The content is blocked for safety reasons."
+        case .unsupportedLanguage: return "The content language is not supported."
+        case .cancelled: return "The summarization request was cancelled."
+        case .invalidResponse: return "The summarization service returned an invalid response."
+        case .unknown: return "An unknown error occurred."
         }
     }
 

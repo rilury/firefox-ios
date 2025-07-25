@@ -867,10 +867,14 @@ class BrowserViewController: UIViewController,
                     let summarizer = FoundationModelsSummarizer()
                     let summary = try await summarizer.summarize(prompt: instructions, text: pageText)
                     navigationHandler?.updateSummarizePanel(with: summary)
-                } catch {
-                    print(error)
+                } catch let summarizerError as SummarizerError {
                     navigationHandler?.updateSummarizePanel(
-                        with: "Error (printing raw error for now): \(error.localizedDescription)"
+                        with: "**\(summarizerError.userMessage)**"
+                    )
+                } catch {
+                    // Should be unreachable, but just in case
+                    navigationHandler?.updateSummarizePanel(
+                        with: "**This should not happen: \(error.localizedDescription)**"
                     )
                 }
             }
