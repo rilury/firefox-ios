@@ -1453,6 +1453,7 @@
 		BAA0A6122E2F0FD500033D82 /* LiteLLMClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA0A6112E2F0FCF00033D82 /* LiteLLMClientError.swift */; };
 		BAA0A6142E2F0FEB00033D82 /* LiteLLMStreamDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA0A6132E2F0FE700033D82 /* LiteLLMStreamDelegate.swift */; };
 		BACE70062DC110CA00E6102C /* ASTranslationModelsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = BACE70052DC110C700E6102C /* ASTranslationModelsFetcher.swift */; };
+		BAE1202B2E332ADF00CE9F8A /* AvailabilityChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE1202A2E332AD900CE9F8A /* AvailabilityChecker.swift */; };
 		BAEB9CCB2E28136300F9F482 /* LiteLLMClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAEB9CCA2E28135B00F9F482 /* LiteLLMClientTests.swift */; };
 		BAEB9EB22E2869C400F9F482 /* SummarizationChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAEB9EB12E2869BE00F9F482 /* SummarizationChecker.swift */; };
 		BAEB9EB42E28726A00F9F482 /* SummarizationCheckerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAEB9EB32E28726100F9F482 /* SummarizationCheckerTests.swift */; };
@@ -9269,6 +9270,7 @@
 		BAA0A6132E2F0FE700033D82 /* LiteLLMStreamDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiteLLMStreamDelegate.swift; sourceTree = "<group>"; };
 		BAA64356B54F1CD258764620 /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = su.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		BACE70052DC110C700E6102C /* ASTranslationModelsFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASTranslationModelsFetcher.swift; sourceTree = "<group>"; };
+		BAE1202A2E332AD900CE9F8A /* AvailabilityChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailabilityChecker.swift; sourceTree = "<group>"; };
 		BAEB9CCA2E28135B00F9F482 /* LiteLLMClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiteLLMClientTests.swift; sourceTree = "<group>"; };
 		BAEB9EB12E2869BE00F9F482 /* SummarizationChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizationChecker.swift; sourceTree = "<group>"; };
 		BAEB9EB32E28726100F9F482 /* SummarizationCheckerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizationCheckerTests.swift; sourceTree = "<group>"; };
@@ -13760,6 +13762,7 @@
 		BAEB9EB02E28699F00F9F482 /* Summary */ = {
 			isa = PBXGroup;
 			children = (
+				BAE1202A2E332AD900CE9F8A /* AvailabilityChecker.swift */,
 				BA726E3B2E31FC6700325CC3 /* LanguageModelSessionAdapter.swift */,
 				BA726E392E31F34A00325CC3 /* MockLanguageModelSession.swift */,
 				BA726E372E31F0A000325CC3 /* LanguageModelResponseStreamProtocol.swift */,
@@ -18479,6 +18482,7 @@
 				43A5643823CD1E1C00B6857D /* UpdateViewController.swift in Sources */,
 				ED80541B2DAD967000484080 /* ContinuationsChecker.swift in Sources */,
 				ED28DAC92C45A95F00D2641C /* TabScrollBehaviorModel.swift in Sources */,
+				BAE1202B2E332ADF00CE9F8A /* AvailabilityChecker.swift in Sources */,
 				8AD248F12C0F735200500AB7 /* BehavioralTargetingEvent.swift in Sources */,
 				1D69FF8D27B17286001F660E /* HomeLogoHeaderCell.swift in Sources */,
 				E4C358551AF144BA00299F7E /* FSReadingList.m in Sources */,
