@@ -30,7 +30,7 @@ protocol LanguageModelSessionProtocol {
 extension LanguageModelSessionProtocol {
     @discardableResult
     func respond(to prompt: Prompt) async throws -> any LanguageModelResponseProtocol {
-        try await respond(to: prompt, options: .init(), isolation: #isolation)
+        try await respond(to: prompt, options: .init())
     }
 
     func streamResponse(to prompt: Prompt) -> any LanguageModelResponseStreamProtocol {

@@ -821,7 +821,7 @@ class BrowserViewController: UIViewController,
     // MARK: - Summarize
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         super.motionEnded(motion, with: event)
-        
+
         // Check if feature is enabled via Nimbus
         guard motion == .motionShake, isSummarizeFeatureEnabled,
             !tabManager.selectedTab!.isFxHomeTab,
@@ -841,11 +841,28 @@ class BrowserViewController: UIViewController,
                 let summarizationChecker = SummarizationChecker()
                 // TODO: Make this a constant (e.g. `SummarizationConstants.maxWords`)
                 let checkResult = await summarizationChecker.check(on: webView, maxWords: 3000)
-                
+
                 // Reasons include page is not readable, page has too many words, page is not in english...
                 guard checkResult.canSummarize, let pageText = checkResult.textContent else { return }
                 navigationHandler?.showSummarizePanel()
 
+                // TODO: Move this to the class itself later.
+                let instructions = """
+                You are an expert at creating mobile-optimized summaries.
+                Process:
+                Step 1: Identify the type of content.
+                Step 2: Based on content type, prioritize:
+                • Recipe - Servings, Total time, Ingredients list, Key steps, Tips.
+                • News - What happened, when, where.
+                • How-to - Total time, Materials, Key steps, Warnings.
+                • Review - Bottom line rating, price.
+                • Opinion - Main arguments, Key evidence.
+                • Personal Blog - Author, main points.
+                • Fiction - Author, summary of plot.
+                • All other content types - Provide a brief summary of no more than 6 sentences.
+                Step 3: Format for mobile using concise language and paragraphs with 3 sentences maximum.
+                Bold critical details (numbers, warnings, key terms). Use markdown format for headings, bold, lists.
+                """
                 do {
                     let summarizer = FoundationModelsSummarizer()
                     let summary = try await summarizer.summarize(prompt: instructions, text: pageText)

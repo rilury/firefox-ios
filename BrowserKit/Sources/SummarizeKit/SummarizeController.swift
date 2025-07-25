@@ -8,37 +8,6 @@ import UIKit
 import ComponentLibrary
 import MarkdownKit
 
-// swiftlint:disable all
-let dummyText = """
-# This is header 1
-## This is header 2
-### This is header 3
-
-**This text is bold**
-*This text is italic*
-
-### 31 Things to Do in Barcelona With Kids — tl;dr
-
-- **Family-friendly attractions:** Parks, beaches, Sagrada Família, etc. Kids still like the “adult” highlights.  
-- **Where to stay:** Family-friendly hotels (e.g. Hotel Barcelona Catedral) or regulated apartments.  
-
-1. **Getting around:** Cable cars, open-top buses, and standard transit are all kid-manageable.  
-2. **Food:** Tapas bars + markets like La Boqueria work great with kids.  
-3. **Packing tips:** Dress for the climate and activities; think sun, walking, and water play.
-
-This is a **Markdown link** that must not render:  
-[Cute Cat Image](https://picsum.photos/200/300)
-
-This is a **Markdown image** that must not render:  
-![Cute Cat Image](https://picsum.photos/200/300 "A placeholder cat")
-
-This is a **Markdown video** that must not render:  
-<video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" controls width="480"></video>
-
-Overall: cultural hits + plenty of kid breaks = happy trip.
-"""
-// swiftlint:enable all
-
 public struct SummarizeViewModel {
     let loadingLabel: String
     let loadingA11yLabel: String
@@ -187,16 +156,6 @@ public class SummarizeController: UIViewController, Themeable {
             }),
             for: .touchUpInside
         )
-        let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
-        let baseFont = FXFontStyles.Regular.body.scaledFont()
-        let headerFont = FXFontStyles.Regular.title1.scaledFont()
-        let baseColor = theme.colors.textPrimary
-        let markdownParser = MarkdownParser(font: baseFont, color: baseColor)
-        /// NOTE: The content is produced by an LLM; generated links may be unsafe or unreachable.
-        /// To keep the MVP safe, link rendering is disabled.
-        markdownParser.enabledElements =  .all.subtracting([.link, .automaticLink])
-        markdownParser.header.font = headerFont
-        summaryView.attributedText = markdownParser.parse(dummyText)
         summaryView.accessibilityIdentifier = viewModel.summarizeTextViewA11yId
         summaryView.accessibilityLabel = viewModel.summarizeTextViewA11yLabel
 
@@ -250,7 +209,7 @@ public class SummarizeController: UIViewController, Themeable {
         UIView.animate(withDuration: UX.initialTransformAnimationDuration, delay: 0.0, options: [], animations: {
             self.tabSnapshot.layer.cornerRadius = UX.tabSnapshotCornerRadius
             self.loadingLabel.alpha = 1.0
-        }) { _ in }
+        })
     }
 
     private func showSummary() {
