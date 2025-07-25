@@ -45,6 +45,8 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case splashScreen
     case startAtHome
     case summarizer
+    case litellmSummarizer
+    case appleSummarizer
     case tabTrayUIExperiments
     case toolbarNavigationHint
     case toolbarUpdateHint
@@ -84,7 +86,8 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .trackingProtectionRefactor,
                 .pdfRefactor,
                 .downloadLiveActivities,
-                .summarizer,
+                .litellmSummarizer,
+                .appleSummarizer,
                 .unifiedAds,
                 .unifiedSearch,
                 .updatedPasswordManager,
@@ -153,6 +156,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .searchEngineConsolidation,
                 .splashScreen,
                 .summarizer,
+                .appleSummarizer,
+                .litellmSummarizer,
                 .tabTrayUIExperiments,
                 .toolbarNavigationHint,
                 .toolbarUpdateHint,

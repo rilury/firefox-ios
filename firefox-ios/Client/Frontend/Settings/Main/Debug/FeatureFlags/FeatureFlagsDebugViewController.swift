@@ -199,7 +199,14 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 statusText: format(string: "Toggle to enable the use of WebEngine library")
             ) { [weak self] _ in
                 self?.reloadView()
-            }
+            },
+            FeatureFlagsBoolSetting(
+                with: .litellmSummarizer,
+                titleText: format(string: "Hosted Summarizer"),
+                statusText: format(string: "Toggle to enable the hosted summarizer")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
         ]
 
         // This is a temporary setting to enable the SummarizationChecker for the initial test build.
@@ -210,9 +217,9 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             if status {
                 children.append(
                     FeatureFlagsBoolSetting(
-                        with: .summarizer,
-                        titleText: format(string: "Summarization Checker"),
-                        statusText: format(string: "Toggle to enable the summarization checker")
+                        with: .appleSummarizer,
+                        titleText: format(string: "Apple Summarizer"),
+                        statusText: format(string: "Toggle to enable the apple summarizer")
                     ) { [weak self] _ in
                         self?.reloadView()
                     }

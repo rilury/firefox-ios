@@ -9,10 +9,24 @@ features:
           Enables the summarizer feature.
         type: Boolean
         default: false
+      litellm-summarizer:
+        description: >
+          If true, enables litellm summarizer.
+        type: Boolean
+        default: false
+      apple-summarizer:
+        description: >
+          If true, enables the apple summarizer.
+        type: Boolean
+        default: false
     defaults:
       - channel: beta
         value:
           enabled: false
+          litellm-summarizer: false
+          apple-summarizer: false
       - channel: developer
         value:
           enabled: false
+          litellm-summarizer: false
+          apple-summarizer: false
